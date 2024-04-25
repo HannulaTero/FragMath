@@ -36,4 +36,13 @@ if (keyboard_check(vk_right))
 	matSpd.Cumulative().Randomize(-2.0, +2.0);
 }
 
+// Sort particles. Test for fun and giggles.
+if (keyboard_check(ord("S"))) 
+{
+	var _sorter = matSpd.Clone();
+	tite_mergesort(_sorter, matSpd);
+	tite_sort_move(matSpd, _sorter);
+	_sorter.Free();
+}
+
 

@@ -182,6 +182,25 @@ function tite_index2D(_out)
 }
 
 
+/// @func	tite_color_lab(_out, _src);
+/// @desc	Changes color space into LAB.
+/// @param	{Struct.TiteData} _out
+/// @param	{Struct.TiteData} _src
+function tite_color_lab(_out, _src)
+{
+	// Do the computation.
+	tite_begin();
+	tite_shader(tite_op_lab);
+	tite_sample("texA", _src);
+	tite_floatN("uniTexelA", _src.texel);
+	tite_target(_out);
+	tite_render();
+	tite_finish();
+	tite_end();
+	return _out;
+}
+
+
 /// @func	tite_swizzle(_out, _r, _g, _b, _a);
 /// @desc	Swizzle around values by given index.
 /// @param	{Struct.TiteData} _out
@@ -207,7 +226,7 @@ function tite_swizzle(_out, _r=0, _g=1, _b=2, _a=3)
 
 
 /// @func	tite_randomize(_out, _min, _max, _seedX, _seedY);
-/// @desc	Randomizes the target.
+/// @desc	Randomizes the target. Computes randomization in shader!
 /// @param	{Struct.TiteData} _out
 /// @param	{Any} _min
 /// @param	{Any} _max
@@ -230,6 +249,19 @@ function tite_randomize(_out, _min=undefined, _max=undefined, _seedX=undefined, 
 	tite_finish();
 	tite_end();
 	return _out;
+}
+
+
+/// @func	tite_random_tex();
+/// @desc	Returns premade randomization texture.
+function tite_random_tex()
+{
+	TITE.randData ??= new TiteData(TITE.randSize[0], TITE.randSize[0], {
+		format: tite_buffer_dtype_format(TITE.randDtype)
+	});
+	if (!TITE.randData.Exists())
+		TITE.randData.FromBuffer(TITE.randBuff);
+	return TITE.randData;
 }
 
 

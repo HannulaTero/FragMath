@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "tite_shd_visualize",
-  "parent": {
-    "name": "Shaders",
-    "path": "folders/TiteGpu/Shaders.yy",
+  "$GMShader":"",
+  "%Name":"tite_shd_visualize",
+  "name":"tite_shd_visualize",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/TiteGpu/Shaders.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

@@ -1,9 +1,11 @@
 {
-  "resourceType": "GMNotes",
-  "resourceVersion": "1.1",
-  "name": "note_tite_gpu",
-  "parent": {
-    "name": "TiteGpu",
-    "path": "folders/TiteGpu.yy",
+  "$GMNotes":"",
+  "%Name":"note_tite_gpu",
+  "name":"note_tite_gpu",
+  "parent":{
+    "name":"TiteGpu",
+    "path":"folders/TiteGpu.yy",
   },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
 }

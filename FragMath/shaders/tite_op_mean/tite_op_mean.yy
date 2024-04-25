@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "tite_op_mean",
-  "parent": {
-    "name": "Piecewise Binary operations",
-    "path": "folders/TiteGpu/Shaders/Piecewise Binary operations.yy",
+  "$GMShader":"",
+  "%Name":"tite_op_mean",
+  "name":"tite_op_mean",
+  "parent":{
+    "name":"Piecewise Binary operations",
+    "path":"folders/TiteGpu/Shaders/Piecewise Binary operations.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

@@ -19,6 +19,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	self.format = surface_rgba32float;
 	self.repetive = true;
 	self.interpolate = false;
+	self.depthDisabled = true;
 	self.surface = -1;
 	
 	// Initialization.
@@ -125,7 +126,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	
 	/// @func	Clone(_copyContent);
 	/// @desc	Creates clone of data, optionally also copy the contents.
-	/// @param	{Bool}					_copyContent
+	/// @param	{Bool}	_copyContent Default is false.
 	/// @return {Struct.TiteData}
 	static Clone = function(_copyContent=false) 
 	{
@@ -143,6 +144,14 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	{
 		// feather ignore GM1045
 		return tite_draw(self, _x, _y, _params);
+	};
+	
+	
+	/// @func	Exists();
+	/// @desc	Checks whether data exists in gpu.
+	static Exists = function()
+	{
+		return tite_data_exists(self);
 	};
 	
 
@@ -192,7 +201,18 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 		self.repetive = _repetive;
 		return self;
 	};
-
+	
+	
+	/// @func	DepthDisable(_disabled);
+	/// @desc	Set whether stores depth buffer.
+	/// @param	{Bool}	_disabled
+	/// @return {Struct.TiteData}
+	static DepthDisable = function(_disabled)
+	{
+		self.depthDisabled = _disabled;
+		return self;
+	};
+	
 	
 #endregion
 // 

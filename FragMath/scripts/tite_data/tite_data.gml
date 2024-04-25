@@ -30,6 +30,7 @@ function tite_data_init(_dst, _width=1, _height=1, _params={})
 	_dst.format	= _params[$ "format"] ?? _dst.format;
 	_dst.repetive = _params[$ "repetive"] ?? _dst.repetive;
 	_dst.interpolate = _params[$ "interpolate"] ?? _dst.interpolate;
+	_dst.depthDisabled = _params[$ "depthDisabled"] ?? _dst.depthDisabled;
 		
 	// Make sure format is supported.
 	_dst.format	= tite_format_find(_dst.format);
@@ -76,9 +77,10 @@ function tite_data_copy(_dst, _src, _copyContent=false)
 	_dst.interpolate = _src.interpolate;
 	if (_copyContent)
 	{
-		// feather ignore GM2023
 		tite_begin();
-		surface_copy(self.Surface(), 0, 0, _src.Surface());
+		var _surfDst = tite_data_surface(_dst);
+		var _surfSrc = tite_data_surface(_src);
+		surface_copy(_surfDst, 0, 0, _surfSrc);
 		tite_end();
 	}
 	return _dst;
@@ -97,19 +99,30 @@ function tite_data_surface(_src)
 		if (surface_get_width(_src.surface) != _src.size[0])
 		|| (surface_get_height(_src.surface) != _src.size[1])
 		|| (surface_get_format(_src.surface) != _src.format)
-		{
-			// Force recreation.
-			surface_free(_src.surface);
-		}
+			surface_free(_src.surface); // Force recreation.
 	}
 		
 	// Make sure surface exists.
 	if (!surface_exists(_src.surface))
 	{
+		var _depthDisabled = surface_get_depth_disable();
+		surface_depth_disable(_src.depthDisabled);
 		_src.surface = surface_create(_src.size[0], _src.size[1], _src.format);
+		surface_depth_disable(_depthDisabled);
 	}
 		
 	return _src.surface;
+}
+
+
+/// @func	tite_data_exists(_data);
+/// @desc	Checks whether data exists in gpu.
+/// @param	{Struct.TiteData} _data
+/// @return	{Bool}
+function tite_data_exists(_data)
+{
+	if (_data == undefined) return false;
+	return surface_exists(_data.surface);
 }
 
 

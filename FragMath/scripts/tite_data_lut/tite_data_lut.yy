@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "tite_data_lut",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Tite Data Lookup",
-    "path": "folders/TiteGpu/Data/Tite Data Lookup.yy",
+  "$GMScript":"",
+  "%Name":"tite_data_lut",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tite_data_lut",
+  "parent":{
+    "name":"Tite Data Lookup",
+    "path":"folders/TiteGpu/Data/Tite Data Lookup.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

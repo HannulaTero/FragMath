@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"tite_kmean",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tite_kmean",
+  "parent":{
+    "name":"Operations",
+    "path":"folders/TiteGpu/Operations.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

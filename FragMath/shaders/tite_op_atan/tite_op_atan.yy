@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "tite_op_atan",
-  "parent": {
-    "name": "Piecewise Trigonometric",
-    "path": "folders/TiteGpu/Shaders/Piecewise Trigonometric.yy",
+  "$GMShader":"",
+  "%Name":"tite_op_atan",
+  "name":"tite_op_atan",
+  "parent":{
+    "name":"Piecewise Trigonometric",
+    "path":"folders/TiteGpu/Shaders/Piecewise Trigonometric.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

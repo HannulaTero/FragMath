@@ -19,7 +19,8 @@ void main()
 	
 	// Sum-reduce given dimension.
 	vec4 _out = vec4(0.0);
-	for(float i = 0.0; i < 16384.0; i++) {
+	for(float i = 0.0; i < 16384.0; i++) 
+	{
 		if (i >= uniIterations) break;
 		vec4 _lhs = texture2D(texA, _coordA);
 		vec4 _rhs = texture2D(texB, _coordB);

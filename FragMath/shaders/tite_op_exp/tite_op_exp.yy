@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "tite_op_exp",
-  "parent": {
-    "name": "Piecewise Unary operations",
-    "path": "folders/TiteGpu/Shaders/Piecewise Unary operations.yy",
+  "$GMShader":"",
+  "%Name":"tite_op_exp",
+  "name":"tite_op_exp",
+  "parent":{
+    "name":"Piecewise Unary operations",
+    "path":"folders/TiteGpu/Shaders/Piecewise Unary operations.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

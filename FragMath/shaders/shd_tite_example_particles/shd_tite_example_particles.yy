@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "shd_tite_example_particles",
-  "parent": {
-    "name": "Example Simple particles",
-    "path": "folders/TiteGpu Examples/Example Simple particles.yy",
+  "$GMShader":"",
+  "%Name":"shd_tite_example_particles",
+  "name":"shd_tite_example_particles",
+  "parent":{
+    "name":"Example Simple particles",
+    "path":"folders/TiteGpu Examples/Example Simple particles.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

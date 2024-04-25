@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "tite_op_transpose",
-  "parent": {
-    "name": "Shaders",
-    "path": "folders/TiteGpu/Shaders.yy",
+  "$GMShader":"",
+  "%Name":"tite_op_transpose",
+  "name":"tite_op_transpose",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/TiteGpu/Shaders.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

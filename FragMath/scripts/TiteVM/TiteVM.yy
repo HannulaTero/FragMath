@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "TiteVM",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Virtual Machine",
-    "path": "folders/TiteGpu/X_Experimental/Virtual Machine.yy",
+  "$GMScript":"",
+  "%Name":"TiteVM",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"TiteVM",
+  "parent":{
+    "name":"Virtual Machine",
+    "path":"folders/TiteGpu/X_Experimental/Virtual Machine.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

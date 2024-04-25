@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "tite_helpers",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Scripts",
-    "path": "folders/TiteGpu/Scripts.yy",
+  "$GMScript":"",
+  "%Name":"tite_helpers",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tite_helpers",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/TiteGpu/Scripts.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

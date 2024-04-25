@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "TiteData",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Tite Data",
-    "path": "folders/TiteGpu/Data/Tite Data.yy",
+  "$GMScript":"",
+  "%Name":"TiteData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"TiteData",
+  "parent":{
+    "name":"Tite Data",
+    "path":"folders/TiteGpu/Data/Tite Data.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

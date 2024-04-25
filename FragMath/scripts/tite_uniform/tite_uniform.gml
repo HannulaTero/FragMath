@@ -86,8 +86,8 @@ function tite_float4_any(_name, _values)
 	} 
 	else 
 	{
-		_values ??= 0.0;
-		tite_float4(_name, _values, _values, _values, _values);
+		var _value = (_values ?? 0.0);
+		tite_float4(_name, _value, _value, _value, _value);
 	}
 }
 
@@ -103,3 +103,74 @@ function tite_integer(_name, _x)
 	var _uniform = shader_get_uniform(_shader, _name);
 	shader_set_uniform_i(_uniform, _x);
 }
+
+
+/// @func	tite_integer1(_name, _x);
+/// @desc	Set shader uniform with given name.
+/// @param	{String}	_name
+/// @param	{Real}		_x
+function tite_integer1(_name, _x)
+{
+	tite_forceinline;
+	tite_integer(_name, _x);
+}
+
+
+/// @func	tite_integer2(_name, _x, _y);
+/// @desc	Set shader uniform with given name.
+/// @param	{String}	_name
+/// @param	{Real}		_x
+/// @param	{Real}		_y
+function tite_integer2(_name, _x, _y)
+{
+	tite_forceinline;
+	var _shader = shader_current();
+	var _uniform = shader_get_uniform(_shader, _name);
+	shader_set_uniform_i(_uniform, _x, _y);
+}
+
+
+/// @func	tite_integer3(_name, _x, _y, _z);
+/// @desc	Set shader uniform with given name.
+/// @param	{String}	_name
+/// @param	{Real}		_x
+/// @param	{Real}		_y
+/// @param	{Real}		_z
+function tite_integer3(_name, _x, _y, _z)
+{
+	tite_forceinline;
+	var _shader = shader_current();
+	var _uniform = shader_get_uniform(_shader, _name);
+	shader_set_uniform_i(_uniform, _x, _y, _z);
+}
+
+
+/// @func	tite_integer4(_name, _x, _y, _z, _w);
+/// @desc	Set shader uniform with given name.
+/// @param	{String}	_name
+/// @param	{Real}		_x
+/// @param	{Real}		_y
+/// @param	{Real}		_z
+/// @param	{Real}		_w
+function tite_integer4(_name, _x, _y, _z, _w)
+{
+	tite_forceinline;
+	var _shader = shader_current();
+	var _uniform = shader_get_uniform(_shader, _name);
+	shader_set_uniform_i(_uniform, _x, _y, _z, _w);
+}
+
+
+/// @func	tite_integerN(_name, _array);
+/// @desc	Set shader uniform with given name.
+/// @param	{String}		_name
+/// @param	{Array<Real>}	_array
+function tite_integerN(_name, _array)
+{
+	tite_forceinline;
+	var _shader = shader_current();
+	var _uniform = shader_get_uniform(_shader, _name);
+	shader_set_uniform_i_array(_uniform, _array);
+}
+
+

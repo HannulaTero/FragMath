@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"tite_sort",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tite_sort",
+  "parent":{
+    "name":"Operations",
+    "path":"folders/TiteGpu/Operations.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

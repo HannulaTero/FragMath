@@ -115,3 +115,18 @@ function tite_format_buffer_dtype(_format)
 	return __map[$ _format] ?? buffer_u8;
 }
 
+
+/// @func	tite_buffer_dtype_format(_dtype);
+/// @desc	Get surface format representable by buffer dtype.
+/// @param	{Constant.BufferDataType} _dtype	
+function tite_buffer_dtype_format(_dtype)
+{
+	tite_forceinline;
+	static __map = tite_mapping([
+		buffer_f32,		surface_rgba32float,
+		buffer_f16,		surface_rgba16float,
+		buffer_u8,		surface_rgba8unorm,
+	]);
+	return __map[$ _dtype] ?? surface_rgba8unorm;
+}
+
