@@ -8,10 +8,7 @@
 /// @param	{Struct}	_params	[Optional]
 function tite_draw(_src, _x=0, _y=0, _params={}) 
 {
-	// Get the uniforms.
 	tite_forceinline;
-	static __shader = tite_shd_visualize;
-	static __uniFactor = shader_get_uniform(__shader, "uniFactor");
 		
 	// Get parameters for drawing.
 	var _w			= _params[$ "width"]		?? _src.size[0];
@@ -49,8 +46,10 @@ function tite_draw(_src, _x=0, _y=0, _params={})
 	// Useful for visualizing float textures.
 	if (_normalize)
 	{
-		shader_set(__shader);
-		shader_set_uniform_f(__uniFactor, _rangeMin, _rangeMax);
+		var _shader = tite_shd_visualize;
+		var _uniFactor = shader_get_uniform(_shader, "uniFactor");
+		shader_set(_shader);
+		shader_set_uniform_f(_uniFactor, _rangeMin, _rangeMax);
 		draw_surface_stretched(_src.Surface(), _x, _y, _w, _h);
 		shader_reset();
 	} 

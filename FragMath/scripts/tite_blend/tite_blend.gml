@@ -56,7 +56,7 @@ function tite_sub(_out)
 
 /// @func	tite_max(_out);
 /// @desc	Gets maximum with all given arguments. Uses only blend modes.
-/// @param	{Struct.TiteData} _out Set starting value beforehand (-infinity etc.)
+/// @param	{Struct.TiteData} _out Set starting value beforehand (-tite_float_max etc.)
 function tite_max(_out)
 {
 	tite_begin();
@@ -74,7 +74,7 @@ function tite_max(_out)
 
 /// @func	tite_min(_out);
 /// @desc	Gets minimum with all given arguments. Uses only blend modes.
-/// @param	{Struct.TiteData} _out Set starting value beforehand (+infinity etc.)
+/// @param	{Struct.TiteData} _out Set starting value beforehand (+tite_float_max etc.)
 function tite_min(_out)
 {
 	tite_begin();

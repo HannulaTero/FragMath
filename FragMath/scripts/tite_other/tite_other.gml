@@ -158,7 +158,7 @@ function tite_normalize(_out, _src, _min=undefined, _max=undefined)
 
 
 /// @func	tite_set(_out, _values);
-/// @desc	Set whole surface to specific value.
+/// @desc	Set whole data to specific value.
 /// @param	{Struct.TiteData}	_out
 /// @param	{Any}				_values
 function tite_set(_out, _values=undefined)
@@ -166,13 +166,29 @@ function tite_set(_out, _values=undefined)
 	// Do the computation.
 	tite_begin();
 	tite_shader(tite_op_set);
-	tite_float4_any("uniOffset", _values ?? 0);
+	tite_float4_any("uniValue", _values ?? 0);
 	tite_target(_out);
 	tite_render();
 	tite_finish();
 	tite_end();
 	return _out;
 }
+
+
+/// @func	tite_copy(_out, _src);
+/// @desc	Copy whole data to specific value.
+/// @param	{Struct.TiteData}	_out
+/// @param	{Struct.TiteData}	_src
+function tite_copy(_out, _src)
+{
+	tite_begin();
+	tite_target(_out);
+	tite_render_surf(_src.Surface());
+	tite_finish();
+	tite_end();
+	return _out;
+}
+
 
 
 /// @func	tite_index1D(_out);

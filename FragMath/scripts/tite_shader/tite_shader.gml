@@ -109,6 +109,20 @@ function tite_render_surf(_surf, _w=undefined, _h=undefined)
 }
 
 
+/// @func	tite_render_sprite(_sprite, _image);
+/// @desc	Do the calculation, updates given area.
+/// @param	{Asset.GMSprite}	_sprite
+/// @param	{Real}				_image
+function tite_render_sprite(_sprite, _image)
+{
+	tite_forceinline;
+	var _target = surface_get_target();
+	var _w = surface_get_width(_target);
+	var _h = surface_get_height(_target);
+	draw_sprite_stretched(_sprite, _image, 0, 0, _w, _h);
+}
+
+
 /// @func	tite_render_data(_data);
 /// @desc	Do the calculation, updates given area.
 /// @param	{Struct.TiteData} _data
@@ -126,6 +140,17 @@ function tite_target(_src)
 {
 	tite_forceinline;
 	surface_set_target(tite_data_surface(_src));
+}
+
+
+/// @func	tite_target_ext(_index, _src);
+/// @desc	Set datablock as destination for calculations
+/// @param	{Real}	_index
+/// @param	{Struct.TiteData}	_src
+function tite_target_ext(_index, _src)
+{
+	tite_forceinline;
+	surface_set_target_ext(_index, tite_data_surface(_src));
 }
 
 

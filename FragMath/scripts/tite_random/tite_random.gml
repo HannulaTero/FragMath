@@ -72,6 +72,7 @@ function tite_texture_random(_recreate=false)
 	// Create random pattern in buffer. 
 	if (initialized == false) || (_recreate == true)
 	{
+		texture.Free();
 		buffer_seek(buffer, buffer_seek_start, 0);
 		repeat(count)
 		{

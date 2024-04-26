@@ -1,7 +1,7 @@
 {
   "$GMShader":"",
-  "%Name":"tite_op_kmeanpp_sqrdiff",
-  "name":"tite_op_kmeanpp_sqrdiff",
+  "%Name":"tite_op_kmean_plusplus_probability",
+  "name":"tite_op_kmean_plusplus_probability",
   "parent":{
     "name":"Initialization++",
     "path":"folders/TiteGpu/Shaders/KMean Clustering operations/Initialization++.yy",

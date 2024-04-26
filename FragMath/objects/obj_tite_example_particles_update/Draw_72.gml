@@ -15,7 +15,7 @@ if (keyboard_check(vk_enter)) || (keyboard_check_pressed(vk_space))
 	matPos.Add(matSpd);		// Position update.
 	matSpd.Scale(, 0.995);	// Friction.
 	matSpd.Offset(, [0.0, 0.5]); // Gravity.
-	matPos.Clamp(, [0, -infinity], [room_width, room_height]);
+	matPos.Clamp(, [0, -tite_float_max], [room_width, room_height]);
 	
 	vm.Execute(@"
 		pos += spd;

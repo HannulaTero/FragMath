@@ -114,6 +114,22 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	};
 	
 	
+	/// @func	FromSprite(_sprite, _image);
+	/// @desc	Put contents of given buffer into gpu datablock.
+	/// @param	{Asset.GMSprite}	_sprite
+	/// @param	{Real}				_image 
+	/// @return {Struct.TiteData}
+	static FromSprite = function(_sprite, _image=0)
+	{
+		tite_begin();
+		tite_target(self);
+		tite_render_sprite(_sprite, _image);
+		tite_finish();
+		tite_end();
+		return self;
+	};
+	
+	
 	/// @func	Copy(_src, _copyContent);
 	/// @desc	Copies structure from other data, optionally also copy the contents.
 	/// @param	{Struct.TiteData}	_src

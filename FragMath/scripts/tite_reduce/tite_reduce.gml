@@ -102,7 +102,7 @@ function tite_reduce_mean(_out, _src)
 /// @param	{Struct.TiteData} _src
 function tite_reduce_max(_out, _src)
 {
-	return tite_reduce(_out, _src, -infinity, function()
+	return tite_reduce(_out, _src, -tite_float_max, function()
 	{
 		gpu_set_blendmode_ext(bm_one, bm_one);
 		gpu_set_blendequation(bm_eq_max);
@@ -116,7 +116,7 @@ function tite_reduce_max(_out, _src)
 /// @param	{Struct.TiteData} _src
 function tite_reduce_min(_out, _src)
 {
-	return tite_reduce(_out, _src, infinity, function()
+	return tite_reduce(_out, _src, tite_float_max, function()
 	{
 		gpu_set_blendmode_ext(bm_one, bm_one);
 		gpu_set_blendequation(bm_eq_min);
@@ -203,7 +203,7 @@ function tite_reduce_mean(_out, _src)
 /// @param	{Struct.TiteData} _src
 function tite_reduce_max(_out, _src)
 {
-	return tite_reduce(_out, _src, tite_op_reduce_max2x2, tite_op_reduce_maxMxN, -infinity);
+	return tite_reduce(_out, _src, tite_op_reduce_max2x2, tite_op_reduce_maxMxN, -tite_float_max);
 }
 
 
@@ -213,7 +213,7 @@ function tite_reduce_max(_out, _src)
 /// @param	{Struct.TiteData} _src
 function tite_reduce_min(_out, _src)
 {
-	return tite_reduce(_out, _src, tite_op_reduce_min2x2, tite_op_reduce_minMxN, infinity);
+	return tite_reduce(_out, _src, tite_op_reduce_min2x2, tite_op_reduce_minMxN, tite_float_max);
 }
 
 

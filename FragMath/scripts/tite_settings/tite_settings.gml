@@ -5,7 +5,8 @@
 #macro	TITE_DEBUG_MODE		true
 #macro	tite_forceinline	gml_pragma("forceinline")
 #macro	tite_encapsulate	with({ outer : other })
-
+#macro	tite_float_max		(power(2.0, +32.0))
+#macro	tite_float_min		(power(2.0, -32.0))
 
 // Helper global variables.
 TITE = {}; 

@@ -1,7 +1,7 @@
 {
   "$GMShader":"",
-  "%Name":"tite_op_kmeanpp_select",
-  "name":"tite_op_kmeanpp_select",
+  "%Name":"tite_op_kmean_plusplus_select",
+  "name":"tite_op_kmean_plusplus_select",
   "parent":{
     "name":"Initialization++",
     "path":"folders/TiteGpu/Shaders/KMean Clustering operations/Initialization++.yy",

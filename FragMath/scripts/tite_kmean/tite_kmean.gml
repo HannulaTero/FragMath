@@ -13,12 +13,14 @@ function TiteKMean(_countClusters=256, _format=surface_rgba32float) constructor
 		-> Data sizes might not actually match.
 		-> Assume interpolation in those cases. 
 		-> Separate maximum size values are stored to easy of use.
+		Indexes tell how data is indexed to closest cluster.
 	*/
 	self.data = []; 
 	self.dataSize = [1, 1];
 	self.countClusters = _countClusters;
 	self.countDimensions = 0;
 	self.clusters = new TiteData(1, self.countClusters, { format: _format });
+	self.indexes = new TiteData(1, 1, { format : "r32float" });
 	self.iteration = 0;
 	
 	
@@ -32,6 +34,7 @@ function TiteKMean(_countClusters=256, _format=surface_rgba32float) constructor
 		self.dataSize[1] = max(self.dataSize[1], _dimension.size[1]);
 		self.countDimensions = array_length(self.data);
 		self.clusters.Resize(self.countDimensions, self.countClusters);
+		self.indexes.Resize(self.dataSize[0], self.dataSize[1]);
 		return self;
 	};
 	
@@ -55,11 +58,21 @@ function TiteKMean(_countClusters=256, _format=surface_rgba32float) constructor
 	};
 	
 	
+	/// @func	Indexify();
+	/// @desc	Generates indexes for data.
+	static Indexify = function()
+	{
+		tite_kmean_indexify(self);
+		return self;
+	};
+	
+	
 	/// @func	Free();
 	/// @desc	
 	static Free = function()
 	{
 		self.clusters.Free();
+		self.indexes.Free();
 		return self;
 	};
 }
@@ -99,7 +112,7 @@ function tite_kmean_initialize(_kmean)
 	// These are used to sample starting values (same for each dimension).
 	tite_randomize_tex(_position);
 	tite_begin();
-	tite_shader(tite_op_kmean_select);
+	tite_shader(tite_op_kmean_initialize_select);
 	tite_sample("texPos", _position);
 	tite_floatN("uniTexelPos", _position.texel);
 	tite_target(_clusters); 
@@ -128,9 +141,9 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 		starting values for clusters as possible.
 	*/
 	tite_timer_begin("K-Mean++ Initialization full");
+	tite_timer_begin("K-Mean++ Preparations");
 	
 	// Preparations.
-	tite_timer_begin("K-Mean++ Preparations");
 	_kmean.iteration = 0;
 	var _data = _kmean.data;
 	var _dataW = _kmean.dataSize[0];
@@ -139,10 +152,8 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 	var _countClusters = _kmean.countClusters;
 	var _countDimensions = _kmean.countDimensions;
 	var _texRandom = tite_texture_random();
-	tite_timer_end();
 	
 	// Create helper data structures.
-	tite_timer_begin("K-Mean++ Helper structures");
 	static distParams = { format : "r32float" };
 	var _distMax = new TiteData(1, 1, distParams);
 	var _distPrev = new TiteData(_dataW, _dataH, distParams);
@@ -156,7 +167,7 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 	var _position = new TiteData(1, 1, paramsPosition);
 	tite_randomize_tex(_position);
 	tite_begin();
-	tite_shader(tite_op_kmean_select);
+	tite_shader(tite_op_kmean_initialize_select);
 	tite_sample("texPos", _position);
 	tite_floatN("uniTexelPos", _position.texel);
 	tite_target(_clusters); 
@@ -171,8 +182,7 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 	
 	
 	// Select values for rest of clusters.
-	tite_timer_begin("K-Mean++ Other clusters");
-	tite_set(_distPrev, infinity);
+	tite_set(_distPrev, tite_float_max);
 	for(var i = 1; i < _countClusters; i++)
 	{
 		// Get the distances to the nearest cluster.
@@ -180,10 +190,13 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 		tite_timer_begin($"K-Mean++ Cluster {i}");
 		for(var j = 0; j < i; j++)
 		{
-			tite_set(_distNext, 0);
 			tite_begin();
 			tite_target(_distNext);
-			tite_shader(tite_op_kmeanpp_sqrdiff);
+			draw_clear_alpha(0, 0);
+			gpu_set_blendenable(true);
+			gpu_set_blendequation(bm_eq_add);
+			gpu_set_blendmode_ext(bm_one, bm_one);
+			tite_shader(tite_op_kmean_plusplus_sqrdiff);
 			tite_sample("texClusters", _clusters);
 			tite_floatN("uniTexelClusters", _clusters.texel);
 			for(var k = 0; k < _countDimensions; k++)
@@ -208,7 +221,7 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 		var _seedY = (get_timer() mod 1097.2777) / 1097.2777;
 		tite_begin();
 		tite_target(_position);
-		tite_shader(tite_op_kmeanpp_probability);
+		tite_shader(tite_op_kmean_plusplus_probability);
 		tite_sample("texDist", _distTemp);
 		tite_sample("texDistMax", _distMax);
 		tite_sample("texRandom", _texRandom);
@@ -224,7 +237,7 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 		// Update cluster value.
 		tite_begin();
 		tite_target(_clusters);
-		tite_shader(tite_op_kmeanpp_select);
+		tite_shader(tite_op_kmean_plusplus_select);
 		tite_sample("texPos", _position);
 		for(var k = 0; k < _countDimensions; k++)
 		{
@@ -232,25 +245,115 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 			tite_floatN("uniTexelDim", _data[k].texel);
 			tite_render_area(k, i, k+1, i+1);
 		}
-		tite_render();
 		tite_finish();
 		tite_end();
 		tite_timer_end();
 	}
-	tite_timer_end();
 	
 	// Finalize, free temporal datas.
-	tite_timer_begin("K-Mean++ Finalization");
 	tite_data_free(_position);
 	tite_data_free(_distPrev);
 	tite_data_free(_distNext);
 	tite_data_free(_distMax);
 	tite_timer_end();
-	tite_timer_end();
 	return _kmean;
 }
 
 
+/// @func	tite_kmean_indexify(_kmean);
+/// @desc	Generates indexes for data based on nearest cluster centroids.
+/// @param	{Struct.TiteKMean} _kmean
+function tite_kmean_indexify(_kmean)
+{
+	tite_timer_begin("K-Mean Indexify");
+	
+	// Preparations.
+	_kmean.iteration++;
+	var _data = _kmean.data;
+	var _dataW = _kmean.dataSize[0];
+	var _dataH = _kmean.dataSize[1];
+	var _clusters = _kmean.clusters;
+	var _countClusters = _kmean.countClusters;
+	var _countDimensions = _kmean.countDimensions;
+	var _texRandom = tite_texture_random();
+	
+	// Create helper data.
+	var _params = { format : "r32float" };
+	
+	var _distPrev = new TiteData(_dataW, _dataH, _params);
+	var _distCurr = new TiteData(_dataW, _dataH, _params);
+	var _distNext = new TiteData(_dataW, _dataH, _params);
+	var _distTemp = _distPrev;
+	
+	var _indexPrev = new TiteData(_dataW, _dataH, _params);
+	var _indexNext = new TiteData(_dataW, _dataH, _params);
+	var _indexTemp = _indexPrev;
+	
+	// Find closest cluster index for each datapoint.
+	tite_set(_indexPrev, -1);
+	tite_set(_distPrev, tite_float_max);
+	for(var i = 0; i < _countClusters; i++)
+	{
+		// Find distances to selected cluster.
+		tite_begin();
+		tite_target(_distCurr);
+		draw_clear_alpha(0, 0);
+		gpu_set_blendenable(true);
+		gpu_set_blendequation(bm_eq_add);
+		gpu_set_blendmode_ext(bm_one, bm_one);
+		tite_shader(tite_op_kmean_indexify_sqrdiff);
+		tite_sample("texClusters", _kmean.clusters);
+		tite_floatN("uniTexelClusters", _kmean.clusters.texel);
+		for(var j = 0; j < _countDimensions; j++)
+		{
+			tite_sample("texDim", _data[j]);
+			tite_floatN("uniTexelDim", _data[j].texel);
+			tite_float2("uniClusterIndex", j, i);
+			tite_render();
+		}
+		tite_finish();
+		tite_end();
+		
+		// Make choose whether update current index.
+		tite_begin();
+		tite_target_ext(0, _indexNext);
+		tite_target_ext(1, _distNext);
+		tite_shader(tite_op_kmean_indexify_select);
+		tite_sample("texDistPrev", _distPrev);
+		tite_sample("texDistCurr", _distCurr);
+		tite_sample("texIndexPrev", _indexPrev);
+		tite_floatN("uniTexel", _kmean.indexes.texel);
+		tite_float1("uniIndexCurr", i);
+		tite_render();
+		tite_finish();
+		tite_end();
+		
+		//var _buff = _kmean.indexes.ToBuffer();
+		//_distPrev.ToBuffer(_buff);
+		//_indexPrev.ToBuffer(_buff);
+		//_distNext.ToBuffer(_buff);
+		//_indexNext.ToBuffer(_buff);
+		//buffer_delete(_buff);
+		//
+		// Swap around.
+		_distTemp = _distNext;
+		_distNext = _distPrev;
+		_distPrev = _distTemp;
+		_indexTemp = _indexNext;
+		_indexNext = _indexPrev;
+		_indexPrev = _indexTemp;
+	}
+	
+	// Finalization.
+	tite_copy(_kmean.indexes, _indexTemp);
+	tite_data_free(_indexPrev);
+	tite_data_free(_indexNext);
+	tite_data_free(_distPrev);
+	tite_data_free(_distCurr);
+	tite_data_free(_distNext);
+	tite_timer_end();
+	return _kmean;
+}
 
 
 

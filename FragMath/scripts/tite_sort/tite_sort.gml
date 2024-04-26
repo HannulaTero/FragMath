@@ -1,7 +1,7 @@
 // @feather ignore GM2017
 
 
-function tite_sort_init(_sorter, _source, _count=infinity) 
+function tite_sort_init(_sorter, _source, _count=tite_float_max) 
 {
 	tite_begin();
 	tite_shader(tite_op_sort_init);
@@ -9,7 +9,7 @@ function tite_sort_init(_sorter, _source, _count=infinity)
 	tite_floatN("uniTexelA", _source.texel);
 	tite_floatN("uniSizeA", _source.size);
 	tite_float1("uniCount", _count);
-	tite_float1("uniNonSort", infinity);
+	tite_float1("uniNonSort", tite_float_max);
 	tite_target(_sorter);
 	tite_render();
 	tite_finish();
