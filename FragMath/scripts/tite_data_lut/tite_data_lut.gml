@@ -1,4 +1,4 @@
-
+// feather ignore GM2017
 
 /// @func	tite_data_lut(_params);
 /// @desc	Creates new lookup data for lut-opreations

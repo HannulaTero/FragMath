@@ -1,3 +1,33 @@
+// feather ignore GM2017
+
+#macro	tite_timer_begin	if (TITE_DEBUG_MODE) __tite_timer_begin
+#macro	tite_timer_end		if (TITE_DEBUG_MODE) __tite_timer_end
+
+
+/// @func	__tite_timer_begin(_message);
+/// @desc	Used for debug messages to calculate timing.
+/// @param	{String} _message 
+function __tite_timer_begin(_message)
+{
+	tite_forceinline;
+	array_push(TITE.debug.timer.times, get_timer());
+	array_push(TITE.debug.timer.messages, _message);
+}
+
+
+/// @func	__tite_timer_end();
+/// @desc	Prints out the used time and message.
+function __tite_timer_end()
+{
+	tite_forceinline;
+	var _message = array_pop(TITE.debug.timer.messages);
+	var _timeBegin = array_pop(TITE.debug.timer.times);
+	var _timeFinish = get_timer();
+	var _time = (_timeFinish - _timeBegin);
+	tite_message($"{_message}, time: {_time / 1000} ms.");
+}
+
+
 /// @func	tite_message(_msg);
 /// @desc	Prompts a message.
 /// @param	{String} _msg

@@ -1,3 +1,4 @@
+// feather ignore GM2017
 
 /// @func	tite_dot(_out, _lhs, _rhs, _axis);
 /// @desc	Do dot product between to matrices with given axis.

@@ -1,3 +1,4 @@
+// feather ignore GM2017
 
 /// @func	TiteDataLut(_params);
 /// @desc	Creates lookup table to be used with TiteGpu lookup operation.

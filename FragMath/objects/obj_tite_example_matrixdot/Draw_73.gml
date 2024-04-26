@@ -1,4 +1,5 @@
 /// @desc VISUALIZE.
+// feather ignore GM2017
 
 var _x = room_width - 64;
 var _y = 64;

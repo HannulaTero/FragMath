@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"tite_blend",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tite_blend",
+  "parent":{
+    "name":"Operations",
+    "path":"folders/TiteGpu/Operations.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

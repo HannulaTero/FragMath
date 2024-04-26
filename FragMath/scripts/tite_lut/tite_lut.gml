@@ -1,3 +1,4 @@
+// feather ignore GM2017
 
 /// @func	tite_lut(_out, _src, _lut);
 /// @desc	Look up table opeation to select new value.

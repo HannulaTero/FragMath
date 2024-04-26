@@ -1,10 +1,11 @@
 /// @desc VISUALIZE PARTICLES
+// feather ignore GM2017
 // feather ignore GM1041
 
 with(obj_tite_example_particles_update)
 {
 	// Preparations.
-	var _vbuff = other.vertexBuffer;
+	var _vbuff = TITE.vtxBufferQuad;
 	var _shader = shd_tite_example_particles;
 	var _sprUVs = sprite_get_uvs(spr_tite_example_particle, 0);
 	var _texture = sprite_get_texture(spr_tite_example_particle, 0);
@@ -22,7 +23,7 @@ with(obj_tite_example_particles_update)
 	shader_set_uniform_f_array(_uniUV, _sprUVs);
 	shader_set_uniform_f(_uniSize, 4, 4);
 	shader_set_uniform_f(_uniColor, 1.0, 1.0, 1.0, 1.0);
-	tite_batch_quad(_texture);	
+	tite_batch_quad(matPos.size, _texture);	
 	gpu_set_blendmode(bm_normal);
 	shader_reset();
 }

@@ -1,5 +1,5 @@
 /// @desc DO CPU CALCULATION
-
+// feather ignore GM2017
 
 // Preparations.
 var _lhsW = lhsGpu.size[0];

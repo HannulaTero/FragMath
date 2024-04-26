@@ -1,4 +1,5 @@
 /// @desc CHANGE THE DATABLOCK SIZES
+// feather ignore GM2017
 
 var _previous = dimension;
 if (keyboard_check_pressed(vk_up)) 
@@ -7,7 +8,7 @@ if (keyboard_check_pressed(vk_up))
 if (keyboard_check_pressed(vk_down)) 
 	dimension /= 2;
 
-dimension = clamp(dimension, 128, 2048);
+dimension = clamp(dimension, 1, 2048);
 
 
 // Update datablock sizes if dimension was changed.

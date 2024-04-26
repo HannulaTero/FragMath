@@ -1,3 +1,4 @@
+// feather ignore GM2017
 
 /// @func	tite_draw(_src, _x, _y, _params);
 /// @desc	Draws gpu datablock with given parameters.
@@ -17,18 +18,26 @@ function tite_draw(_src, _x=0, _y=0, _params={})
 	var _h			= _params[$ "height"]		?? _src.size[1];
 	var _halign		= _params[$ "halign"]		?? 0.0;
 	var _valign		= _params[$ "valign"]		?? 0.0;
-	var _background	= _params[$ "background"]	?? false;
 	var _outline	= _params[$ "outline"]		?? false;
+	var _background	= _params[$ "background"]	?? false;
 	var _normalize	= _params[$ "normalize"]	?? false;
 	var _rangeMin	= _params[$ "rangeMin"]		?? 0.0;
 	var _rangeMax	= _params[$ "rangeMax"]		?? 1.0;
+	var _filter		= _params[$ "filter"]		?? false;
+	var _blend		= _params[$ "blend"]		?? false;
 	
 	// Calculate positions, size and offsets
 	_w *= _params[$ "xscale"] ?? 1.0;
 	_h *= _params[$ "yscale"] ?? 1.0;
 	_x -= _w * _halign;
 	_y -= _h * _valign;
-			
+	
+	// Set gpu settings.
+	tite_begin();
+	gpu_set_blendenable(_blend);
+	gpu_set_blendmode(bm_normal);
+	gpu_set_tex_filter(_filter);
+	
 	// Draw background for surface.
 	if (_background)
 	{
@@ -56,6 +65,8 @@ function tite_draw(_src, _x=0, _y=0, _params={})
 		var _c = c_white;
 		draw_rectangle_color(_x, _y, _x+_w, _y+_h, _c,_c,_c,_c, true);
 	}
+	
+	tite_end();
 	return _src;
 }
 

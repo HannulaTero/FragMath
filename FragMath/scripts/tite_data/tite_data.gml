@@ -1,4 +1,4 @@
-
+// feather ignore GM2017
 
 /// @func	tite_data(_width, _height, _params);
 /// @desc	Creates new datastructure for holding GPU data, matrix-like.
@@ -31,29 +31,12 @@ function tite_data_init(_dst, _width=1, _height=1, _params={})
 	_dst.repetive = _params[$ "repetive"] ?? _dst.repetive;
 	_dst.interpolate = _params[$ "interpolate"] ?? _dst.interpolate;
 	_dst.depthDisabled = _params[$ "depthDisabled"] ?? _dst.depthDisabled;
-		
-	// Make sure format is supported.
-	_dst.format	= tite_format_find(_dst.format);
-		
-	// Set up the size.
-	_dst.size[0] = clamp(ceil(_width), 1, 16384);
-	_dst.size[1] = clamp(ceil(_height), 1, 16384);
-		
-	// Set up texel size.
-	_dst.texel[0] = 1.0 / _dst.size[0];
-	_dst.texel[1] = 1.0 / _dst.size[1];
-	_dst.count = _dst.size[0] * _dst.size[1];
-		
-	// Give warning if size was not valid.
-	if (_dst.size[0] != _width) || (_dst.size[1] != _height)
-	{
-		tite_warning(
-			+ $"TiteData {_dst.name} Initialization: \n"
-			+ $" - Non-valid size: [{_width}, {_height}] \n"
-			+ $" - Changed into:   {_dst.size} "
-		);
-	}
-		
+	
+	// Prepare the gpu data.
+	if (is_string(_dst.format))
+		_dst.format = tite_format_get_string(_dst.format);
+	_dst.format	= tite_format_get_compatible(_dst.format);
+	tite_data_resize(_dst, _width, _height);
 	return _dst;
 }
 
@@ -93,6 +76,8 @@ function tite_data_copy(_dst, _src, _copyContent=false)
 /// @return	{Id.Surface}
 function tite_data_surface(_src)
 {
+	tite_forceinline;
+	
 	// Make sure surface is correct shape.
 	if (surface_exists(_src.surface))
 	{
@@ -115,12 +100,41 @@ function tite_data_surface(_src)
 }
 
 
+/// @func	tite_data_resize(_data, _w, _h);
+function tite_data_resize(_data, _w, _h=1)
+{
+	tite_forceinline;
+	tite_data_free(_data);
+	
+	// Set up the size.
+	_data.size[0] = clamp(ceil(_w), 1, 16384);
+	_data.size[1] = clamp(ceil(_h), 1, 16384);
+		
+	// Set up texel size.
+	_data.texel[0] = 1.0 / _data.size[0];
+	_data.texel[1] = 1.0 / _data.size[1];
+	_data.count = _data.size[0] * _data.size[1];
+		
+	// Give warning if size was not valid.
+	if (_data.size[0] != _w) || (_data.size[1] != _h)
+	{
+		tite_warning(
+			+ $"TiteData {_data.name} Resize: \n"
+			+ $" - Non-valid size: [{_w}, {_h}] \n"
+			+ $" - Changed into:   {_data.size} "
+		);
+	}
+	return _data;
+}
+
+
 /// @func	tite_data_exists(_data);
 /// @desc	Checks whether data exists in gpu.
 /// @param	{Struct.TiteData} _data
 /// @return	{Bool}
 function tite_data_exists(_data)
 {
+	tite_forceinline;
 	if (_data == undefined) return false;
 	return surface_exists(_data.surface);
 }
@@ -132,6 +146,7 @@ function tite_data_exists(_data)
 /// @return	{Struct.TiteData}
 function tite_data_free(_data)
 {
+	tite_forceinline;
 	if (surface_exists(_data.surface))
 		surface_free(_data.surface);
 	return _data;

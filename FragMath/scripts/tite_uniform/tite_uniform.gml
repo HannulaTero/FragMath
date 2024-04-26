@@ -1,3 +1,4 @@
+// feather ignore GM2017
 
 /// @func	tite_floatN(_name, _array);
 /// @desc	Set shader uniforms with given name.

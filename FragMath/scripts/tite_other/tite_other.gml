@@ -1,3 +1,4 @@
+// feather ignore GM2017
 
 /// @func	tite_clamp(_out, _src, _min, _max);
 /// @desc	Clamping function. 
@@ -96,6 +97,31 @@ function tite_scale(_out, _src, _scale=undefined)
 	tite_sample("texA", _src);
 	tite_floatN("uniTexelA", _src.texel);
 	tite_float4_any("uniScale", _scale ?? 1.0);
+	tite_target(_out);
+	tite_render();
+	tite_finish();
+	tite_end();
+	return _out;
+}
+
+
+/// @func	tite_divide(_out, _src, _divide);
+/// @desc	Do operation with one inputs, store result into output.
+/// @param	{Struct.TiteData}	_out
+/// @param	{Struct.TiteData}	_src
+/// @param	{Any}				_divide
+function tite_divide(_out, _src, _divide=undefined)
+{
+	// Trying to do in-place operation.
+	if (_out == _src)
+		return tite_inplace(tite_scale, [_out, _src, _divide]);
+	
+	// Do the computation.
+	tite_begin();
+	tite_shader(tite_op_divide);
+	tite_sample("texA", _src);
+	tite_floatN("uniTexelA", _src.texel);
+	tite_float4_any("uniDivide", _divide ?? 1.0);
 	tite_target(_out);
 	tite_render();
 	tite_finish();
@@ -224,45 +250,6 @@ function tite_swizzle(_out, _r=0, _g=1, _b=2, _a=3)
 	return _out;
 }
 
-
-/// @func	tite_randomize(_out, _min, _max, _seedX, _seedY);
-/// @desc	Randomizes the target. Computes randomization in shader!
-/// @param	{Struct.TiteData} _out
-/// @param	{Any} _min
-/// @param	{Any} _max
-/// @param	{Any} _seedX
-/// @param	{Any} _seedY
-function tite_randomize(_out, _min=undefined, _max=undefined, _seedX=undefined, _seedY=undefined)
-{ 
-	_seedX ??= (get_timer() mod 2777) / 2777.0;
-	_seedY ??= (get_timer() mod 1097) / 1097.0;
-	tite_begin();
-	tite_shader(tite_op_randomize);
-	tite_floatN("uniTexelA", _out.texel);
-	tite_float4_any("uniMin", _min ?? 0);
-	tite_float4_any("uniMax", _max ?? 0);
-	tite_float4_any("uniSeedX", _seedX);
-	tite_float4_any("uniSeedY", _seedY);
-	tite_float4("uniFactor", 2.12, 2.34, 2.56, 2.78);
-	tite_target(_out);
-	tite_render();
-	tite_finish();
-	tite_end();
-	return _out;
-}
-
-
-/// @func	tite_random_tex();
-/// @desc	Returns premade randomization texture.
-function tite_random_tex()
-{
-	TITE.randData ??= new TiteData(TITE.randSize[0], TITE.randSize[0], {
-		format: tite_buffer_dtype_format(TITE.randDtype)
-	});
-	if (!TITE.randData.Exists())
-		TITE.randData.FromBuffer(TITE.randBuff);
-	return TITE.randData;
-}
 
 
 

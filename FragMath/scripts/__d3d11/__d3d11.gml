@@ -1,3 +1,5 @@
+// feather ignore all
+
 /// @macro {String} Path to the GMD3D11 dynamic library.
 /// Default value is "GMD3D11.dll".
 #macro GMD3D11_PATH "GMD3D11.dll"
@@ -93,6 +95,7 @@ function d3d11_draw_instanced(_count)
 		1, ty_real);
 	return external_call(_fn, _count);
 }
+
 
 /// @func vertex_submit_instanced(_vbuff, _prim, _texture, _count)
 ///

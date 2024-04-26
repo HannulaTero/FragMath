@@ -1,4 +1,5 @@
 /// @desc
+// feather ignore GM2017
 
 // Allow resizing for more.
 dimension = 256;

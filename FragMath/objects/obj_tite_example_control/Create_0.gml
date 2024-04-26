@@ -1,4 +1,5 @@
 /// @desc
+// feather ignore GM2017
 
 show_debug_overlay(true, true);
 

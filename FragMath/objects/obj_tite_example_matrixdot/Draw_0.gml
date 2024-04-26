@@ -1,4 +1,5 @@
 /// @desc GPU CALCULATIONS.
+// feather ignore GM2017
 
 // Randomize input.
 if (keyboard_check_pressed(ord("R")))

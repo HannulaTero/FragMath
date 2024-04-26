@@ -1,3 +1,5 @@
+// feather ignore all
+
 /// @func d3d11_cbuffer_begin()
 ///
 /// @desc Starts building a constant buffer.

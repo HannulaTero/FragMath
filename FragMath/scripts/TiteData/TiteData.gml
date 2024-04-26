@@ -1,3 +1,4 @@
+// feather ignore GM2017
 
 /// @func	TiteData(_width, _height, _params);
 /// @desc	Storage with methods to make surface act bit like a MxN Matrix.
@@ -144,6 +145,14 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	{
 		// feather ignore GM1045
 		return tite_draw(self, _x, _y, _params);
+	};
+	
+	
+	/// @func	Resize(_w, _h);
+	/// @desc	Realloates data in the gpu, destroyes prevous one.
+	static Resize = function(_w, _h)
+	{
+		return tite_data_resize(self, _w, _h);
 	};
 	
 	

@@ -1,11 +1,11 @@
-
+// feather ignore GM2017
 
 /// @func	tite_binary(_out, _lhs, _rhs, _op);
 /// @desc	Do operation with two inputs, store result into output.
 /// @param	{Struct.TiteData}	_out
 /// @param	{Struct.TiteData}	_lhs
 /// @param	{Struct.TiteData}	_rhs
-/// @param	{Asset.GMShader}		_op		Tite math shader.
+/// @param	{Asset.GMShader}	_op		Tite math shader.
 function tite_binary(_out, _lhs, _rhs, _op) 
 {
 	// Trying to do in-place operation.
@@ -25,4 +25,6 @@ function tite_binary(_out, _lhs, _rhs, _op)
 	tite_end();
 	return _out;
 }
+
+
 

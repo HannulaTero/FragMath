@@ -1,4 +1,5 @@
 /// @desc DO THE CALCULATIONS
+// feather ignore GM2017
 
 // Reset particles.
 if (keyboard_check(ord("R")))

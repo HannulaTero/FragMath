@@ -1,0 +1,11 @@
+{
+  "$GMNotes":"",
+  "%Name":"note_tite_license",
+  "name":"note_tite_license",
+  "parent":{
+    "name":"TiteGpu",
+    "path":"folders/TiteGpu.yy",
+  },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
+}

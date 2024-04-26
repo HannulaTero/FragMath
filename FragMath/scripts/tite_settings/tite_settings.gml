@@ -1,7 +1,10 @@
+// feather ignore GM2017
 
 #macro	TITE_NAME			"TiteGPU Math"
 #macro	TITE				global.g_tite
+#macro	TITE_DEBUG_MODE		true
 #macro	tite_forceinline	gml_pragma("forceinline")
+#macro	tite_encapsulate	with({ outer : other })
 
 
 // Helper global variables.
@@ -9,14 +12,11 @@ TITE = {};
 TITE.previousShader = [-1];		// Stores so it can be return after calculations are done.
 TITE.cumulative = false;		// Store next calculation as cumulative result.
 
-// Pseudo-random lookup table.
-TITE.randSize = [256, 256];
-TITE.randDtype = buffer_f32;
-TITE.randDsize = buffer_sizeof(TITE.randDtype);
-TITE.randCount = TITE.randSize[0] * TITE.randSize[1];
-TITE.randBytes = TITE.randCount * TITE.randDsize;
-TITE.randBuff = buffer_create(TITE.randBytes, buffer_fixed, 1);
-TITE.randData = undefined;
+// Debug
+TITE.debug = {};
+TITE.debug.timer = {};
+TITE.debug.timer.times = [];
+TITE.debug.timer.messages = [];
 
 // Vertex format and buffers for batchable execution.
 TITE.vtxFormatFill = undefined;
@@ -34,22 +34,6 @@ TITE.vtxBatchMax = [
 	(1 << (TITE.vtxBatchCount[0] - 1)),
 	(1 << (TITE.vtxBatchCount[1] - 1)),
 ];
-
-
-// Initialize pseudo-random lookup buffer, used generating randomized texture too.
-{
-	var _buff = TITE.randBuff;
-	var _dtype = TITE.randDtype;
-	buffer_seek(_buff, buffer_seek_start, 0);
-	repeat(TITE.randCount)
-	{
-		buffer_write(_buff, _dtype, random(1));
-		buffer_write(_buff, _dtype, random(1));
-		buffer_write(_buff, _dtype, random(1));
-		buffer_write(_buff, _dtype, random(1));
-	}
-	buffer_seek(_buff, buffer_seek_start, 0);
-}
 
 
 // Create vertex format and vertex buffer for fullscreen fill.

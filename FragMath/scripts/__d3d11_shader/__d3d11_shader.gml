@@ -1,3 +1,5 @@
+// feather ignore all
+
 /// @macro {Real} Maximum number of slots for shader resources.
 #macro D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT 128
 

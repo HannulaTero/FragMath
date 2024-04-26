@@ -1,8 +1,8 @@
 
-/// @func	tite_format_find(_format);
+/// @func	tite_format_get_compatible(_format);
 /// @desc	Find supported format which resembles closest to given format. 
 /// @param	{Constant.SurfaceFormatType} _format	
-function tite_format_find(_format)
+function tite_format_get_compatible(_format)
 {
 	tite_forceinline;
 	
@@ -57,6 +57,28 @@ function tite_format_name(_format)
 		surface_r16float,		"R16Float"
 	]);
 	return __map[$ _format] ?? "<unknown surface format>";
+}
+
+
+/// @func	tite_format_get_string(_string);
+/// @desc	Get data format from string.
+/// @param	{String} _string
+/// @return	{Constant.SurfaceFormatType}
+function tite_format_get_string(_string)
+{
+	tite_forceinline;
+	static __map = tite_mapping([
+		"rgba32float",	surface_rgba32float,	
+		"rgba16float",	surface_rgba16float,	
+		"rgba8unorm",	surface_rgba8unorm,		
+		"rgba4unorm",	surface_rgba4unorm,		
+		"rg8unorm",		surface_rg8unorm,		
+		"r8unorm",		surface_r8unorm,		
+		"r32float",		surface_r32float,		
+		"r16float",		surface_r16float,		
+	]);
+	_string = string_lower(_string);
+	return __map[$ _string] ?? surface_rgba8unorm;
 }
 
 

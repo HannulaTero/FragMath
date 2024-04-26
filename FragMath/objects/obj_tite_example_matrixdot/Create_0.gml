@@ -1,4 +1,5 @@
 /// @desc DECLARATION.
+// feather ignore GM2017
 
 // Prepare GPU datablocks
 lhsGpu = new TiteData(64, 784, { name : "Matrix LHS", format : surface_r32float } );

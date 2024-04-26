@@ -1,5 +1,5 @@
 /// @desc COMPARE RESULTS.
-
+// feather ignore GM2017
 
 if (keyboard_check_pressed(vk_enter))
 {

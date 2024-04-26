@@ -1,4 +1,4 @@
-
+// feather ignore GM2017
 
 /// @func	tite_begin();
 /// @desc	Changes gpu states to more suitable for calculations.
@@ -83,14 +83,39 @@ function tite_render()
 	tite_forceinline;
 	vertex_submit(TITE.vtxBufferFill, pr_trianglestrip, -1);
 }
-	
-	
+
+
 /// @func	tite_render_area(x0, y0, x1, y1);
 /// @desc	Do the calculation, updates given area.
 function tite_render_area(x0, y0, x1, y1)
 {
 	tite_forceinline;
 	draw_sprite_stretched(tite_sprite_1x1, 0, x0, y0, x1-x0, y1-y0);
+}
+
+
+/// @func	tite_render_surf(_surf);
+/// @desc	Do the calculation, updates given area.
+/// @param	{Id.Surface} _surf
+/// @param	{Real}	_w
+/// @param	{Real}	_h
+function tite_render_surf(_surf, _w=undefined, _h=undefined)
+{
+	tite_forceinline;
+	var _target = surface_get_target();
+	_w ??= surface_get_width(_target);
+	_h ??= surface_get_height(_target);
+	draw_surface_stretched(_surf, 0, 0, _w, _h);
+}
+
+
+/// @func	tite_render_data(_data);
+/// @desc	Do the calculation, updates given area.
+/// @param	{Struct.TiteData} _data
+function tite_render_data(_data)
+{
+	tite_forceinline;
+	tite_render_surf(_data.Surface());
 }
 
 
@@ -113,27 +138,27 @@ function tite_finish()
 }
 
 
-/// @func	tite_batch(_vtxArray, _vtxType, _tex, _bias);
+/// @func	tite_batch(_size, _vtxArray, _vtxType, _tex, _bias);
 /// @desc	Do the calculations by given vertex array.
+/// @param	{Array<Real>} _size
 /// @param	{Any} _vtxArray
 /// @param	{Constant.PrimitiveType} _vtxType
 /// @param	{Pointer.Texture} _tex
 /// @param	{Array<Real>} _bias
-function tite_batch(_vtxArray, _vtxType, _tex=undefined, _bias=[0, 0])
+function tite_batch(_size, _vtxArray, _vtxType, _tex=undefined, _bias=[0, 0])
 {
 	tite_forceinline;
 	_tex ??= -1;
-	var _target = surface_get_target();
-	var _targetW = surface_get_width(_target);
-	var _targetH = surface_get_height(_target);
+	var _w = _size[0];
+	var _h = _size[1];
 	var _maxW = TITE.vtxBatchMax[0];
 	var _maxH = TITE.vtxBatchMax[1];
 	tite_floatN("uniBatchBias", _bias);
-	for(var i = 0; i < _targetW; i += min(_maxW, _targetW - i)) {
-	for(var j = 0; j < _targetH; j += min(_maxH, _targetH - j)) {
+	for(var i = 0; i < _w; i += min(_maxW, _w - i)) {
+	for(var j = 0; j < _h; j += min(_maxH, _h - j)) {
 		tite_floatN("uniBatchOffset", [i, j]);
-		var _x = log2(min(_maxW, _targetW - i));
-		var _y = log2(min(_maxH, _targetH - j));
+		var _x = log2(min(_maxW, _w - i));
+		var _y = log2(min(_maxH, _h - j));
 		vertex_submit(_vtxArray[_x][_y], _vtxType, _tex);
 	}}
 }
@@ -141,34 +166,37 @@ function tite_batch(_vtxArray, _vtxType, _tex=undefined, _bias=[0, 0])
 
 /// @func	tite_batch_quad(_tex);
 /// @desc	Do the calculations by given vertex quads.
+/// @param	{Array<Real>} _size
 /// @param	{Pointer.Texture} _tex
-function tite_batch_quad(_tex=undefined)
+function tite_batch_quad(_size, _tex=undefined)
 {
 	tite_forceinline;
 	static bias = [0.0, 0.0];
-	tite_batch(TITE.vtxBufferQuad, pr_trianglelist, _tex, bias);
+	tite_batch(_size, TITE.vtxBufferQuad, pr_trianglelist, _tex, bias);
 }
 
 
 /// @func	tite_batch_lines(_tex);
 /// @desc	Do the calculations by given vertex lines.
+/// @param	{Array<Real>} _size
 /// @param	{Pointer.Texture} _tex
-function tite_batch_lines(_tex=undefined)
+function tite_batch_lines(_size, _tex=undefined)
 {
 	tite_forceinline;
 	static bias = [0.5, 0.5];
-	tite_batch(TITE.vtxBufferLine, pr_linelist, _tex, bias);
+	tite_batch(_size, TITE.vtxBufferLine, pr_linelist, _tex, bias);
 }
 
 
 /// @func	tite_batch_points(_tex);
 /// @desc	Do the calculations by given vertex points.
+/// @param	{Array<Real>} _size
 /// @param	{Pointer.Texture} _tex
-function tite_batch_points(_tex=undefined)
+function tite_batch_points(_size, _tex=undefined)
 {
 	tite_forceinline;
 	static bias = [0.5, 0.5];
-	tite_batch(TITE.vtxBufferPoint, pr_pointlist, _tex, bias);
+	tite_batch(_size, TITE.vtxBufferPoint, pr_pointlist, _tex, bias);
 }
 
 

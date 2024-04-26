@@ -1,5 +1,5 @@
 /// @desc
-
+// feather ignore GM2017
 
 self.callback = function() { };
 self.data = [];
