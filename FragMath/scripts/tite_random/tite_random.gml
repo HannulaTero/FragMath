@@ -61,20 +61,21 @@ function tite_texture_random(_recreate=false)
 {
 	// Constants.
 	static initialized = false;
-	static size = [256, 256];
 	static dtype = buffer_f32;
 	static dsize = buffer_sizeof(dtype);
-	static count = size[0] * size[1];
 	static bytes = count * dsize * 4;
 	static buffer = buffer_create(bytes, buffer_fixed, 1);
-	static texture = new TiteData(size[0], size[1], { format: "rgba32float" });
+	static texture = new TiteData({ 
+		size: [256, 256],
+		format: "rgba32float" 
+	});
 	
 	// Create random pattern in buffer. 
 	if (initialized == false) || (_recreate == true)
 	{
 		texture.Free();
 		buffer_seek(buffer, buffer_seek_start, 0);
-		repeat(count)
+		repeat(texture.count)
 		{
 			buffer_write(buffer, dtype, random(1));
 			buffer_write(buffer, dtype, random(1));

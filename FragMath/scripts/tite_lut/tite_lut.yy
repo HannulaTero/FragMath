@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"tite_lut",
   "isCompatibility":false,
   "isDnD":false,

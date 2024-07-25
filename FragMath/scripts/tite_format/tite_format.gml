@@ -60,6 +60,18 @@ function tite_format_name(_format)
 }
 
 
+/// @func	tite_format_get(_format);
+/// @desc	Returns supported format from given format or string.
+/// @param	{Any} _format	type-constant or string
+/// @return	{Constant.SurfaceFormatType}
+function tite_format_get(_format)
+{
+	if (is_string(_format))
+		_format = tite_format_get_string(_format);
+	return tite_format_get_compatible(_format);
+}
+
+
 /// @func	tite_format_get_string(_string);
 /// @desc	Get data format from string.
 /// @param	{String} _string

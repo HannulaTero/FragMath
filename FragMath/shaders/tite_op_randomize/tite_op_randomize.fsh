@@ -6,23 +6,23 @@ uniform vec4 uniSeedX;
 uniform vec4 uniSeedY;
 uniform vec4 uniFactor;
 
-float random(vec2 _seed) 
+float random(vec2 seed) 
 {
-    return fract(sin(dot(_seed, vec2(12.9898, 78.233))) * 43758.5453123);
+    return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
 void main()
 {
 	// Do the calculation.
-	vec2 _coord = gl_FragCoord.xy * uniTexelA;
-	vec4 _out;
+	vec2 coord = gl_FragCoord.xy * uniTexelA;
+	vec4 res;
 	for(int i = 0; i < 4; i++)
 	{
-		vec2 _seed = vec2(uniSeedX[i], uniSeedY[i]);
-		float _rate = random(_coord * uniFactor[i] + _seed);
-		_out[i] = mix(uniMin[i], uniMax[i], _rate);
+		vec2 seed = vec2(uniSeedX[i], uniSeedY[i]);
+		float rate = random(coord * uniFactor[i] + seed);
+		res[i] = mix(uniMin[i], uniMax[i], rate);
 	}
 
 	// Store the result.
-	gl_FragData[0] = _out;
+	gl_FragData[0] = res;
 }

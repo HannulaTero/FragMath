@@ -6,7 +6,8 @@
 ## HOW TO USE
 
 1)	Create data with given size. With struct you can give optional parameters.
-		data = new TiteData(256, 256); // Creates gpu data block with default parameters.
+		data = new TiteData();	// Creates block with default parameters.
+		data = new TiteData({ size: [32, 32] });
 		
 2)	Do calculations in any of Draw-events, as this uses shaders and surfaces. 
 	You can use either method-functions, or script functions directly.

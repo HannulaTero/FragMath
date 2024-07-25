@@ -6,11 +6,11 @@ uniform vec4 uniScale;
 void main()
 {
 	// Get the input value.
-	vec4 _lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
+	vec4 lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
 	
 	// Do the calculation.
-	vec4 _out = _lhs * uniScale;
+	vec4 res = lhs * uniScale;
 
 	// Store the result.
-	gl_FragData[0] = _out;
+	gl_FragData[0] = res;
 }

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"tite_vm_scanner",
   "isCompatibility":false,
   "isDnD":false,

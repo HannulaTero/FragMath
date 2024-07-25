@@ -4,7 +4,7 @@
   "name":"tite_op_kmean_indexify_sqrdiff",
   "parent":{
     "name":"Indexify",
-    "path":"folders/TiteGpu/Shaders/KMean Clustering operations/Indexify.yy",
+    "path":"folders/TiteGpu/Classes/Tite KMean/Shaders/Indexify.yy",
   },
   "resourceType":"GMShader",
   "resourceVersion":"2.0",

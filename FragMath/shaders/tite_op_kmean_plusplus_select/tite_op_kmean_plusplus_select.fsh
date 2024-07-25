@@ -6,7 +6,7 @@ uniform vec2 uniTexelDim;
 
 void main()
 {
-	vec4 _lhs = texture2D(texPos, vec2(0.5, 0.5));
-	vec4 _out = texture2D(texDim, _lhs.xy * uniTexelDim);
-	gl_FragData[0] = _out;
+	vec4 lhs = texture2D(texPos, vec2(0.5, 0.5));
+	vec4 res = texture2D(texDim, lhs.xy * uniTexelDim);
+	gl_FragData[0] = res;
 }

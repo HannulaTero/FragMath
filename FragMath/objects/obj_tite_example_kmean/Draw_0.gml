@@ -4,7 +4,10 @@
 
 if (keyboard_check_pressed(vk_enter))
 {
-	var _dim = new TiteData(1024, 1024, { format : "rgba32float "});
+	var _dim = new TiteData({
+		size: [1024, 1024],
+		format : "rgba32float"
+	});
 	tite_randomize_tex(_dim);
 	kmean.AddDimension(_dim);
 }
@@ -16,8 +19,11 @@ if (keyboard_check_pressed(vk_backspace))
 	var _count = sprite_get_number(_spr);
 	for(var i = 0; i < _count; i++)
 	{
-		var _dim = new TiteData(1024, 1024, { format : "rgba32float "});
-			_dim.FromSprite(_spr, i);
+		var _dim = new TiteData({
+			size: [1024, 1024],
+			format : "rgba32float"
+		});
+		_dim.FromSprite(_spr, i);
 		kmean.AddDimension(_dim);
 	}
 }

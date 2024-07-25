@@ -13,22 +13,22 @@ uniform float uniIterations;
 void main()
 {
 	// Choose starting coordinates.
-	vec2 _pos = floor(gl_FragCoord.xy);
-	vec2 _coordA = (_pos * uniStartA + 0.5) * uniTexelA;
-	vec2 _coordB = (_pos * uniStartB + 0.5) * uniTexelB;
+	vec2 pos = floor(gl_FragCoord.xy);
+	vec2 coordA = (pos * uniStartA + 0.5) * uniTexelA;
+	vec2 coordB = (pos * uniStartB + 0.5) * uniTexelB;
 	
 	// Sum-reduce given dimension.
-	vec4 _out = vec4(0.0);
+	vec4 res = vec4(0.0);
 	for(float i = 0.0; i < 16384.0; i++) 
 	{
 		if (i >= uniIterations) break;
-		vec4 _lhs = texture2D(texA, _coordA);
-		vec4 _rhs = texture2D(texB, _coordB);
-		_coordA += uniStepsA;
-		_coordB += uniStepsB;
-		_out += _lhs * _rhs;
+		vec4 lhs = texture2D(texA, coordA);
+		vec4 rhs = texture2D(texB, coordB);
+		coordA += uniStepsA;
+		coordB += uniStepsB;
+		res += lhs * rhs;
 	}
 
 	// Store the result.
-	gl_FragData[0] = _out;
+	gl_FragData[0] = res;
 }

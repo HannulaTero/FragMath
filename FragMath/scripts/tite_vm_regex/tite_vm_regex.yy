@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"tite_vm_regex",
   "isCompatibility":false,
   "isDnD":false,

@@ -5,8 +5,16 @@
 dimension = 256;
 		
 // The gpu datablacks, used for simple particles.
-matPos = new TiteData(dimension, dimension, { name: "Position" });
-matSpd = new TiteData(dimension, dimension, { name: "Speed" });
+matPos = new TiteData({ 
+	name: "Position",
+	size: [dimension, dimension],
+	format: "rgba32float"
+});
+matSpd = new TiteData({ 
+	name: "Speed" ,
+	size: [dimension, dimension],
+	format: "rgba32float"
+});
 lutSin = new TiteDataLut({
 	width: 256,
 	rangeMin: -pi,

@@ -9,9 +9,9 @@ uniform vec2 uniClusterIndex;
 
 void main()
 {
-	vec4 _lhs = texture2D(texDim, gl_FragCoord.xy * uniTexelDim);
-	vec4 _rhs = texture2D(texClusters, (uniClusterIndex + 0.5) * uniTexelClusters);
-	vec4 _sqr = pow(_lhs - _rhs, vec4(2.0));
-	float _dist = (_sqr.x + _sqr.y + _sqr.z + _sqr.w);
-	gl_FragData[0].r = _dist;
+	vec4 lhs = texture2D(texDim, gl_FragCoord.xy * uniTexelDim);
+	vec4 rhs = texture2D(texClusters, (uniClusterIndex + 0.5) * uniTexelClusters);
+	vec4 sqr = pow(lhs - rhs, vec4(2.0));
+	float dist = (sqr.x + sqr.y + sqr.z + sqr.w);
+	gl_FragData[0].r = dist;
 }

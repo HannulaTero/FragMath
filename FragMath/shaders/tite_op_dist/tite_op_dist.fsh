@@ -7,12 +7,12 @@ uniform vec2 uniTexelB;
 void main()
 {
 	// Get the input value.
-	vec4 _lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
-	vec4 _rhs = texture2D(texB, gl_FragCoord.xy * uniTexelB);
+	vec4 lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
+	vec4 rhs = texture2D(texB, gl_FragCoord.xy * uniTexelB);
 	
 	// Do the calculation.
-	float _out = distance(_lhs, _rhs);
+	float res = distance(lhs, rhs);
 
 	// Store the result.
-	gl_FragData[0] = vec4(_out);
+	gl_FragData[0] = vec4(res);
 }

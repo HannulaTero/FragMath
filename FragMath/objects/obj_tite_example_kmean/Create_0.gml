@@ -1,4 +1,4 @@
 /// @desc DECLARATION.
 // feather ignore GM2017
 
-kmean = new TiteKMean(256, "rgba32float");
+kmean = new TiteKMean_Frames(256, "rgba8unorm");

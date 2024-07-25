@@ -134,3 +134,80 @@ function tite_assert_piecewise(_lhs, _rhs)
 	}
 }
 
+
+/// @func	tite_resize_power2(_size);
+/// @desc	Adds padding to make size into power of 2, also count to 2D size.
+/// @param	{Any} _size		Either [w, h] array, or count of all elements.
+/// @return {Array<Real>}
+function tite_resize_power2(_size)
+{
+	if (is_array(_size))
+	{
+		return [
+			power(2, ceil(log2(_size[0]))),
+			power(2, ceil(log2(_size[1])))
+		];
+	}
+	else
+	{
+		var _temp = ceil(log2(_size));
+		return [
+			power(2, ceil(_temp / 2)),
+			power(2, floor(_temp / 2)),
+		];
+	}
+}
+
+
+/// @func	tite_pattern_match(_pattern, _data);
+/// @desc	Returns whether data matches the pattern.
+/// @param	{Struct} _pattern
+/// @param	{Any} _data
+function tite_pattern_match(_pattern, _data)
+{
+	// TODO
+	tite_warning("Pattern Match not implemented");
+	return false;
+}
+
+
+/// @func	tite_encapsulate_scope(_self, _other);
+/// @desc	
+/// @param	{Any}	_self
+/// @param	{Any}	_other
+function tite_encapsulate_scope(_self=self, _other=other)
+{
+	// Create new returnable scope.
+	var _scope = { 
+		outer : _self,
+	};
+	
+	// Check whether struct or instance, 
+	// as static can't be used with instances.
+	if (is_struct(_self))
+	{
+		// Check wether first in scope-stack.
+		if (struct_exists(_self, "root"))
+		{
+			_scope.root = _self;
+		}
+		static_set(_scope, _self);
+	}
+	else
+	{
+		_scope.root = _self;
+	}
+	
+	// Return new scope.
+	return _scope;
+}
+
+
+
+
+
+
+
+
+
+

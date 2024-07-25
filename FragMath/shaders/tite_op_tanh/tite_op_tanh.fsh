@@ -5,13 +5,13 @@ uniform vec2 uniTexelA;
 void main()
 {
 	// Get the input value.
-	vec4 _lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
+	vec4 lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
 	
 	// Do the calculation.
-	vec4 _a = exp(+_lhs);
-	vec4 _b = exp(-_lhs);
-	vec4 _out = (_a - _b) / (_a + _b);
+	vec4 a = exp(+lhs);
+	vec4 b = exp(-lhs);
+	vec4 res = (a - b) / (a + b);
 
 	// Store the result.
-	gl_FragData[0] = _out;
+	gl_FragData[0] = res;
 }

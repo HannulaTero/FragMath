@@ -2,9 +2,21 @@
 // feather ignore GM2017
 
 // Prepare GPU datablocks
-lhsGpu = new TiteData(64, 784, { name : "Matrix LHS", format : surface_r32float } );
-rhsGpu = new TiteData(784, 32, { name : "Matrix RHS", format : surface_r32float } );
-outGpu = new TiteData(64, 32, { name : "Matrix OUT", format : surface_r32float } );
+lhsGpu = new TiteData({ 
+	name : "Matrix LHS", 
+	size: [64, 784],
+	format : "r32float" 
+});
+rhsGpu = new TiteData({ 
+	name : "Matrix RHS", 
+	size: [784, 32],
+	format : "r32float"  
+});
+outGpu = new TiteData({ 
+	name : "Matrix OUT", 
+	size: [64, 32],
+	format : "r32float"  
+});
 
 // Prepare CPU datablocks.
 dtype = tite_format_buffer_dtype(lhsGpu.format);

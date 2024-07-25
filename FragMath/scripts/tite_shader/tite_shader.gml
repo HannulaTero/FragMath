@@ -74,7 +74,22 @@ function tite_sample(_name, _src)
 	gpu_set_tex_repeat_ext(_sampler, _src.repetive);
 	texture_set_stage(_sampler, _src.Texture());
 }
-	
+
+
+/// @func	tite_sample_vertex(_name, _src);
+/// @desc	Set datablock as texture sampler in vertex shader, input for operation.
+/// @param	{String}			_name
+/// @param	{Struct.TiteData}	_src
+function tite_sample_vertex(_name, _src)
+{
+	// feather ignore GM1041
+	var _shader = shader_current();
+	var _sampler = shader_get_sampler_index(_shader, _name);
+	gpu_set_tex_filter_ext(_sampler, _src.interpolate);
+	gpu_set_tex_repeat_ext(_sampler, _src.repetive);
+	texture_set_stage_vs(_sampler, _src.Texture()); 
+}
+
 	
 /// @func	tite_render();
 /// @desc	Do the calculation, updates whole render target.
@@ -94,18 +109,19 @@ function tite_render_area(x0, y0, x1, y1)
 }
 
 
-/// @func	tite_render_surf(_surf);
+/// @func	tite_render_surf(_surf, _params);
 /// @desc	Do the calculation, updates given area.
 /// @param	{Id.Surface} _surf
-/// @param	{Real}	_w
-/// @param	{Real}	_h
-function tite_render_surf(_surf, _w=undefined, _h=undefined)
+/// @param	{Struct}	_params
+function tite_render_surf(_surf, _params={})
 {
 	tite_forceinline;
 	var _target = surface_get_target();
-	_w ??= surface_get_width(_target);
-	_h ??= surface_get_height(_target);
-	draw_surface_stretched(_surf, 0, 0, _w, _h);
+	var _x = _params[$ "x"] ?? 0;
+	var _y = _params[$ "y"] ?? 0;
+	var _w = _params[$ "w"] ?? surface_get_width(_target);
+	var _h = _params[$ "h"] ?? surface_get_height(_target);	
+	draw_surface_stretched(_surf, _x, _y, _w, _h);
 }
 
 
@@ -123,13 +139,14 @@ function tite_render_sprite(_sprite, _image)
 }
 
 
-/// @func	tite_render_data(_data);
+/// @func	tite_render_data(_data, _params);
 /// @desc	Do the calculation, updates given area.
 /// @param	{Struct.TiteData} _data
-function tite_render_data(_data)
+/// @param	{Struct} _params
+function tite_render_data(_data, _params={})
 {
 	tite_forceinline;
-	tite_render_surf(_data.Surface());
+	tite_render_surf(_data.Surface(), _params);
 }
 
 
@@ -160,32 +177,6 @@ function tite_finish()
 {
 	tite_forceinline;
 	surface_reset_target();
-}
-
-
-/// @func	tite_batch(_size, _vtxArray, _vtxType, _tex, _bias);
-/// @desc	Do the calculations by given vertex array.
-/// @param	{Array<Real>} _size
-/// @param	{Any} _vtxArray
-/// @param	{Constant.PrimitiveType} _vtxType
-/// @param	{Pointer.Texture} _tex
-/// @param	{Array<Real>} _bias
-function tite_batch(_size, _vtxArray, _vtxType, _tex=undefined, _bias=[0, 0])
-{
-	tite_forceinline;
-	_tex ??= -1;
-	var _w = _size[0];
-	var _h = _size[1];
-	var _maxW = TITE.vtxBatchMax[0];
-	var _maxH = TITE.vtxBatchMax[1];
-	tite_floatN("uniBatchBias", _bias);
-	for(var i = 0; i < _w; i += min(_maxW, _w - i)) {
-	for(var j = 0; j < _h; j += min(_maxH, _h - j)) {
-		tite_floatN("uniBatchOffset", [i, j]);
-		var _x = log2(min(_maxW, _w - i));
-		var _y = log2(min(_maxH, _h - j));
-		vertex_submit(_vtxArray[_x][_y], _vtxType, _tex);
-	}}
 }
 
 
@@ -222,6 +213,32 @@ function tite_batch_points(_size, _tex=undefined)
 	tite_forceinline;
 	static bias = [0.5, 0.5];
 	tite_batch(_size, TITE.vtxBufferPoint, pr_pointlist, _tex, bias);
+}
+
+
+/// @func	tite_batch(_size, _vtxArray, _vtxType, _tex, _bias);
+/// @desc	Do the calculations by given vertex array.
+/// @param	{Array<Real>} _size
+/// @param	{Any} _vtxArray
+/// @param	{Constant.PrimitiveType} _vtxType
+/// @param	{Pointer.Texture} _tex
+/// @param	{Array<Real>} _bias
+function tite_batch(_size, _vtxArray, _vtxType, _tex=undefined, _bias=[0, 0])
+{
+	tite_forceinline;
+	_tex ??= -1;
+	var _w = _size[0];
+	var _h = _size[1];
+	var _maxW = TITE.vtxBatchMax[0];
+	var _maxH = TITE.vtxBatchMax[1];
+	tite_floatN("uniBatchBias", _bias);
+	for(var i = 0; i < _w; i += min(_maxW, _w - i)) {
+	for(var j = 0; j < _h; j += min(_maxH, _h - j)) {
+		tite_floatN("uniBatchOffset", [i, j]);
+		var _x = log2(min(_maxW, _w - i));
+		var _y = log2(min(_maxH, _h - j));
+		vertex_submit(_vtxArray[_x][_y], _vtxType, _tex);
+	}}
 }
 
 

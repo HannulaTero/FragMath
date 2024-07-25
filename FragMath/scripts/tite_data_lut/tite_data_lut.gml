@@ -28,10 +28,12 @@ function tite_data_lut_init(_dst, _params={})
 		
 	// Initialize the GPU data.
 	_width ??= ceil(abs(_dst.rangeMax - _dst.rangeMin));
-	tite_data_init(_dst, _width, 1, _params);
+	_params = variable_clone(_params, 1);
+	_params.size = [_width, 1];
+	tite_data_init(_dst, _params);
 	
 	// Initialize buffer in CPU side.
-	var _count = _dst.count; 
+	var _count = _dst.size[0] * _dst.size[1]; 
 	var _dsize = tite_format_bytes(_dst.format);
 	var _bytes = _dsize * _count;
 	_dst.buffer = buffer_create(_bytes, buffer_fixed, 1);

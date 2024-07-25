@@ -175,15 +175,16 @@ function tite_set(_out, _values=undefined)
 }
 
 
-/// @func	tite_copy(_out, _src);
+/// @func	tite_copy(_out, _src, _params);
 /// @desc	Copy whole data to specific value.
 /// @param	{Struct.TiteData}	_out
 /// @param	{Struct.TiteData}	_src
-function tite_copy(_out, _src)
+/// @param	{Any}	_params
+function tite_copy(_out, _src, _params=undefined)
 {
 	tite_begin();
 	tite_target(_out);
-	tite_render_surf(_src.Surface());
+	tite_render_data(_src, _params);
 	tite_finish();
 	tite_end();
 	return _out;

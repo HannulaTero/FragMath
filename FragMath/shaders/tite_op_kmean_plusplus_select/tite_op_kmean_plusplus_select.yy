@@ -4,7 +4,7 @@
   "name":"tite_op_kmean_plusplus_select",
   "parent":{
     "name":"Initialization++",
-    "path":"folders/TiteGpu/Shaders/KMean Clustering operations/Initialization++.yy",
+    "path":"folders/TiteGpu/Classes/Tite KMean/Shaders/Initialization++.yy",
   },
   "resourceType":"GMShader",
   "resourceVersion":"2.0",

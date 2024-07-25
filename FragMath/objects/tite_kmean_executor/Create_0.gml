@@ -1,20 +1,55 @@
 /// @desc
 // feather ignore GM2017
 
-self.callback = function() { };
-self.data = [];
-self.clusters = undefined;
-self.dimensions = 1;
-self.maxClusters = 255;
+#macro	concurrent_split function()
 
-
-Initialize = function(_maxClusters, _data)
+function concurrent_for(_struct)
 {
-	self.data = is_array(_data) ? _data : [_data];
-	self.dimensions = array_length(self.data);
-	self.maxClusters = _maxClusters;
-	self.clusters = new TiteData(self.dimensions, self.maxClusters);
-};
+	
+}
+
+concurrent_for({
+	iteration : 0,
+	condition : function() { return (iteration < 200) },
+	increment : function() { return (iteration++); },
+	resume: function()
+	{
+			
+	},
+	body: [
+	concurrent_split 
+	{
+		concurrent_for({
+			iteration : 0,
+			condition : function() { return (iteration < 200) },
+			increment : function() { return (iteration++); },
+			body: [
+			concurrent_split 
+			{
+		
+			}, 
+			concurrent_split 
+			{
+		
+			}, 
+			concurrent_split 
+			{
+		
+			}]
+		});
+	}, 
+	concurrent_split 
+	{
+		
+	}, 
+	concurrent_split 
+	{
+		
+	}]
+});
+
+
+
 
 
 

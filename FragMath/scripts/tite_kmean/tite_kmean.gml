@@ -1,112 +1,61 @@
 // feather ignore GM2017
 
-/// @func	TiteKMean(_countClusters, _format);
+
+
+
+
+/// @func	tite_kmean(_params);
 /// @desc	
-/// @param	{Real} _countClusters
-/// @param	{Any} _format			Surface format constant or string.
-function TiteKMean(_countClusters=256, _format=surface_rgba32float) constructor
-{
-	/*
-		Clusters width represents dimenionality.
-		Clusters height represents separate clusters.
-		Data array represents different dimensionalities of data.
-		-> Data sizes might not actually match.
-		-> Assume interpolation in those cases. 
-		-> Separate maximum size values are stored to easy of use.
-		Indexes tell how data is indexed to closest cluster.
-	*/
-	self.data = []; 
-	self.dataSize = [1, 1];
-	self.countClusters = _countClusters;
-	self.countDimensions = 0;
-	self.clusters = new TiteData(1, self.countClusters, { format: _format });
-	self.indexes = new TiteData(1, 1, { format : "r32float" });
-	self.iteration = 0;
-	
-	
-	/// @func	AddDimension(_dimension);
-	/// @desc
-	/// @param	{Struct.TiteData}	_dimension
-	static AddDimension = function(_dimension)
-	{
-		array_push(self.data, _dimension);
-		self.dataSize[0] = max(self.dataSize[0], _dimension.size[0]);
-		self.dataSize[1] = max(self.dataSize[1], _dimension.size[1]);
-		self.countDimensions = array_length(self.data);
-		self.clusters.Resize(self.countDimensions, self.countClusters);
-		self.indexes.Resize(self.dataSize[0], self.dataSize[1]);
-		return self;
-	};
-	
-	
-	/// @func	Initialize();
-	/// @desc	
-	static Initialize = function()
-	{
-		tite_kmean_initialize(self);
-		return self;
-	};
-	
-	
-	/// @func	InitializePlusPlus(_probability);
-	/// @desc	
-	/// @param	{Real} _probability
-	static InitializePlusPlus = function(_probability=undefined)
-	{
-		tite_kmean_initialize_plusplus(self, _probability);
-		return self;
-	};
-	
-	
-	/// @func	Indexify();
-	/// @desc	Generates indexes for data.
-	static Indexify = function()
-	{
-		tite_kmean_indexify(self);
-		return self;
-	};
-	
-	
-	/// @func	Free();
-	/// @desc	
-	static Free = function()
-	{
-		self.clusters.Free();
-		self.indexes.Free();
-		return self;
-	};
-}
-
-
-/// @func	tite_kmean(_out, _maxClusters, _sources);
-/// @desc	Generates clusters from given dimensional data.
-/// @param	{Struct.TiteData} _out				Stores generated clusters.
-/// @param	{Real} _maxClusters					Maximum amount of clusters.
-/// @param	{Array<Struct.TiteData>} _sources	Array of source data, each representing additional dimensionality.
-function tite_kmean(_out, _maxClusters, _sources)
+/// @param	{Struct} _params
+function tite_kmean(_params=undefined)
 { 
-
-	return _out;
+	return new TiteKMean(_params);
 }
 
 
-/// @func	tite_kmean_initialize(_kmean);
+/// @func	tite_kmean_set(_kmean, _src, _dimension, _offset);
+/// @desc	Set datapoints' values for specific dimension.
+/// @param	{Struct.TiteKmean} _kmean
+/// @param	{Struct.TiteData} _src
+/// @param	{Real} _dimension	Which dimension.
+function tite_kmean_set(_kmean, _src, _dimension=0, _offset=0)
+{ 
+	tite_timer_begin("K-Mean Set Dimension");
+	tite_begin();
+	tite_target(_kmean.input); 
+	draw_surface_stretched(
+		_src.Surface(), 
+		_kmean.layoutDatapoints[0] * _kmean.layoutDimensions[0],
+		_kmean.layoutDatapoints[1] * _kmean.layoutDimensions[1],
+		_kmean.layoutDatapoints[0],
+		_kmean.layoutDatapoints[1]
+	);
+	tite_finish();
+	tite_end();
+	tite_timer_end();
+	return _kmean;
+}
+
+
+/// @func	tite_kmean_begin_regular(_kmean);
 /// @desc	Initializes cluster values with random value samples from data.
 /// @param	{Struct.TiteKMean} _kmean
-function tite_kmean_initialize(_kmean)
+function tite_kmean_begin_regular(_kmean)
 {
-	tite_timer_begin("K-Mean Initialize");
+	tite_timer_begin("K-Mean Begin");
 	
 	// feather ignore GM1041
 	// Preparations.
 	_kmean.iteration = 0;
-	var _data = _kmean.data;
+	var _data = _kmean.input;
 	var _dataW = _kmean.dataSize[0];
 	var _dataH = _kmean.dataSize[1];
 	var _clusters = _kmean.clusters;
 	var _countClusters = _kmean.countClusters;
 	var _countDimensions = _kmean.countDimensions;
-	var _position = new TiteData(1, _countClusters, { format: surface_rgba32float });
+	var _position = new TiteData({ 
+		size: [1, _countClusters], format: surface_rgba32float 
+	});
 	
 	// Select random position for each cluster.
 	// These are used to sample starting values (same for each dimension).
@@ -126,15 +75,15 @@ function tite_kmean_initialize(_kmean)
 	tite_data_free(_position);
 	
 	tite_timer_end();
-	return self;
+	return _kmean;
 }
 
 
-/// @func	tite_kmean_initialize_plusplus(_kmean);
-/// @desc	Smarter but demanding initialization of cluster values.
+/// @func	tite_kmean_begin_plusplus(_kmean);
+/// @desc	Smarter (but demanding) initialization of cluster values.
 /// @param	{Struct.TiteKMean} _kmean
 /// @param	{Real}	_probability Selection probability when finding datapoint.
-function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
+function tite_kmean_begin_plusplus(_kmean, _probability=0.8)
 {
 	/* 
 		K-Mean++ initialization tries to find as different 
@@ -145,7 +94,7 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 	
 	// Preparations.
 	_kmean.iteration = 0;
-	var _data = _kmean.data;
+	var _data = _kmean.input;
 	var _dataW = _kmean.dataSize[0];
 	var _dataH = _kmean.dataSize[1];
 	var _clusters = _kmean.clusters;
@@ -154,17 +103,31 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 	var _texRandom = tite_texture_random();
 	
 	// Create helper data structures.
-	static distParams = { format : "r32float" };
-	var _distMax = new TiteData(1, 1, distParams);
-	var _distPrev = new TiteData(_dataW, _dataH, distParams);
-	var _distNext = new TiteData(_dataW, _dataH, distParams);
+	var _distMax = new TiteData({ 
+		size: [1, 1],
+		format : "r32float" 
+	});
+	
+	var _distPrev = new TiteData({ 
+		size: [_dataW, _dataH],
+		format : "r32float" 
+	});
+	
+	var _distNext = new TiteData({ 
+		size: [_dataW, _dataH],
+		format : "r32float" 
+	});
+	
+	var _position = new TiteData({ 
+		size: [1, 1],
+		format : "rgba32float" 
+	});
+	
 	var _distTemp = _distPrev;
 	tite_timer_end();
 	
 	// Select first cluster value at random.
 	tite_timer_begin("K-Mean++ First cluster");
-	static paramsPosition = { format : "rgba32float" };
-	var _position = new TiteData(1, 1, paramsPosition);
 	tite_randomize_tex(_position);
 	tite_begin();
 	tite_shader(tite_op_kmean_initialize_select);
@@ -180,13 +143,11 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 	tite_end();
 	tite_timer_end();
 	
-	
-	// Select values for rest of clusters.
 	tite_set(_distPrev, tite_float_max);
 	for(var i = 1; i < _countClusters; i++)
 	{
-		// Get the distances to the nearest cluster.
-		// Then find the single maximum distance.
+		// Get the distances to the nearest cluster, then find the single maximum distance.
+		// - Currently this is most expensive part of K-Mean++.
 		tite_timer_begin($"K-Mean++ Cluster {i}");
 		for(var j = 0; j < i; j++)
 		{
@@ -213,7 +174,7 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 			_distNext = _distPrev;
 			_distPrev = _distTemp;
 		}
-		tite_reduce_max(_distMax, _distTemp);	
+		tite_reduce_max(_distMax, _distTemp);
 		_distMax.Sqrt();
 		
 		// Sample from image based on probability.
@@ -248,7 +209,8 @@ function tite_kmean_initialize_plusplus(_kmean, _probability=0.8)
 		tite_finish();
 		tite_end();
 		tite_timer_end();
-	}
+	} 
+	
 	
 	// Finalize, free temporal datas.
 	tite_data_free(_position);
@@ -269,7 +231,7 @@ function tite_kmean_indexify(_kmean)
 	
 	// Preparations.
 	_kmean.iteration++;
-	var _data = _kmean.data;
+	var _data = _kmean.input;
 	var _dataW = _kmean.dataSize[0];
 	var _dataH = _kmean.dataSize[1];
 	var _clusters = _kmean.clusters;
@@ -278,15 +240,18 @@ function tite_kmean_indexify(_kmean)
 	var _texRandom = tite_texture_random();
 	
 	// Create helper data.
-	var _params = { format : "r32float" };
+	var _params = { 
+		size : [_dataW, _dataH],
+		format : "r32float" 
+	};
 	
-	var _distPrev = new TiteData(_dataW, _dataH, _params);
-	var _distCurr = new TiteData(_dataW, _dataH, _params);
-	var _distNext = new TiteData(_dataW, _dataH, _params);
+	var _distPrev = new TiteData(_params);
+	var _distCurr = new TiteData(_params);
+	var _distNext = new TiteData(_params);
 	var _distTemp = _distPrev;
 	
-	var _indexPrev = new TiteData(_dataW, _dataH, _params);
-	var _indexNext = new TiteData(_dataW, _dataH, _params);
+	var _indexPrev = new TiteData(_params);
+	var _indexNext = new TiteData(_params);
 	var _indexTemp = _indexPrev;
 	
 	// Find closest cluster index for each datapoint.
@@ -345,7 +310,7 @@ function tite_kmean_indexify(_kmean)
 	}
 	
 	// Finalization.
-	tite_copy(_kmean.indexes, _indexTemp);
+	tite_copy(_kmean.indexes, _indexTemp); 
 	tite_data_free(_indexPrev);
 	tite_data_free(_indexNext);
 	tite_data_free(_distPrev);
@@ -356,7 +321,47 @@ function tite_kmean_indexify(_kmean)
 }
 
 
+/// @func	tite_kmean_update(_kmean);
+/// @desc	Updates clusters based on current indexes for data.
+/// @param	{Struct.TiteKMean} _kmean
+function tite_kmean_update(_kmean)
+{
+	tite_timer_begin("K-Mean Indexify");
+	
+	
+	
+	tite_timer_end();
+}
 
+
+/// @func	tite_kmean_free(_kmean);
+/// @desc	
+/// @param	{Struct.TiteKMean} _kmean
+function tite_kmean_free(_kmean)
+{
+	tite_timer_begin("K-Mean Free");
+	// Clear metadata.
+	_kmean.iteration = 0;
+	_kmean.countDatapoints = 1;
+	_kmean.countDimensions = 1;
+	_kmean.countClusters = 1;
+	
+	// Clear datastructures.
+	_kmean.input.Free();
+	_kmean.indexes.Free();
+	_kmean.clusters.Free();
+	_kmean.clustersSum.Free();
+	_kmean.clustersCount.Free();
+	tite_timer_end();
+	return;
+}
+	
+	
+	
+	
+	
+	
+	
 
 
 

@@ -4,7 +4,7 @@
 #macro	TITE				global.g_tite
 #macro	TITE_DEBUG_MODE		true
 #macro	tite_forceinline	gml_pragma("forceinline")
-#macro	tite_encapsulate	with({ outer : other })
+#macro	tite_encapsulate	with(tite_encapsulate_scope(self, other))
 #macro	tite_float_max		(power(2.0, +32.0))
 #macro	tite_float_min		(power(2.0, -32.0))
 
@@ -87,7 +87,7 @@ TITE.vtxBatchMax = [
 	// Point vertex buffer.
 	vertex_format_begin();
 	vertex_format_add_custom(vertex_type_float2, vertex_usage_texcoord);
-	TITE.vtxPointFormat = vertex_format_end();
+	TITE.vtxFormatPoint = vertex_format_end();
 	TITE.vtxBufferPoint = array_create(TITE.vtxBatchCount[0]);
 	
 	for(var i = 0; i < TITE.vtxBatchCount[0]; i++)
@@ -105,7 +105,7 @@ TITE.vtxBatchMax = [
 			var _vtxBufferPoint = vertex_create_buffer();
 			vertex_begin(_vtxBufferQuad, TITE.vtxFormatQuad);
 			vertex_begin(_vtxBufferLine, TITE.vtxFormatLine);
-			vertex_begin(_vtxBufferPoint, TITE.vtxPointFormat);
+			vertex_begin(_vtxBufferPoint, TITE.vtxFormatPoint);
 			
 			for(var ii = 0; ii < _w; ii++) {
 			for(var jj = 0; jj < _h; jj++) {

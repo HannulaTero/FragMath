@@ -14,9 +14,10 @@ dimension = clamp(dimension, 1, 2048);
 // Update datablock sizes if dimension was changed.
 if (_previous != dimension)
 {
-	tite_data_init(matPos, dimension, dimension);
-	tite_data_init(matSpd, dimension, dimension);
-	//matPos.Initialize(dimension, dimension);
-	//matSpd.Initialize(dimension, dimension);
+	var _params = {
+		size: [dimensions, dimension]
+	};
+	matPos.Initialize(_params);
+	matSpd.Initialize(_params);
 	Reset();
 }

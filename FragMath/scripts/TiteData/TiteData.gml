@@ -1,11 +1,9 @@
 // feather ignore GM2017
 
-/// @func	TiteData(_width, _height, _params);
-/// @desc	Storage with methods to make surface act bit like a MxN Matrix.
-/// @param	{Real}		_width
-/// @param	{Real}		_height
+/// @func	TiteData(_params);
+/// @desc	Data-block which lives in GPU. Can be thought as MxN matrix.
 /// @param	{Struct}	_params		Parameters for creating data. Check initialization method.
-function TiteData(_width=undefined, _height=undefined, _params=undefined) constructor
+function TiteData(_params=undefined) constructor
 {
 //==========================================================
 //
@@ -24,11 +22,9 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	self.surface = -1;
 	
 	// Initialization.
-	if (_width != undefined)
-	|| (_height != undefined)
-	|| (_params != undefined) 
+	if (_params != undefined) 
 	{
-		return tite_data_init(self, _width, _height, _params);
+		return tite_data_init(self, _params);
 	}
 	
 	
@@ -39,15 +35,13 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 #region USER HANDLE METHODS.
 
 
-	/// @func	Initialize(_width, _height, _params);
+	/// @func	Initialize(_params);
 	/// @desc	(Re)Initialize data with given parameters..
-	/// @param	{Real}		_width
-	/// @param	{Real}		_height
 	/// @param	{Struct}	_params		[Optional] format and name.
 	/// @return	{Struct.TiteData}
-	static Initialize = function(_width=1, _height=1, _params={})
+	static Initialize = function(_params={})
 	{
-		return tite_data_init(self, _width, _height, _params);
+		return tite_data_init(self, _params);
 	};
 	
 
@@ -74,7 +68,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @return {Real}
 	static Bytes = function()
 	{
-		return self.count * tite_format_bytes(self.format);
+		return self.size[0] * self.size[1] * tite_format_bytes(self.format);
 	};
 	
 	
@@ -164,11 +158,12 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	};
 	
 	
-	/// @func	Resize(_w, _h);
-	/// @desc	Realloates data in the gpu, destroyes prevous one.
-	static Resize = function(_w, _h)
+	/// @func	Resize(_params);
+	/// @desc	Reallocates data in the gpu, destroyes prevous one.
+	/// @param	{Any}	_params
+	static Resize = function(_params)
 	{
-		return tite_data_resize(self, _w, _h);
+		return tite_data_resize(self, _params);
 	};
 	
 	
@@ -250,7 +245,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @desc	General piecewise binary operator executer.
 	/// @param	{Struct.TiteData}	_lhs
 	/// @param	{Struct.TiteData}	_rhs
-	/// @param	{Asset.GMShader}		_op		TiteGpu shader
+	/// @param	{Asset.GMShader}	_op		TiteGpu shader
 	/// @return {Struct.TiteData}
 	static Binary = function(_lhs, _rhs, _op) 
 	{
@@ -372,7 +367,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @func	Unary(_src, _op);
 	/// @desc	General unary operator executer.
 	/// @param	{Struct.TiteData}	_src
-	/// @param	{Asset.GMShader}		_op		TiteGpu shader
+	/// @param	{Asset.GMShader}	_op		TiteGpu shader
 	/// @return {Struct.TiteData}
 	static Unary = function(_src, _op) 
 	{
@@ -532,7 +527,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @desc	Matrix dot product, sumreduces given axis.
 	/// @param	{Struct.TiteData}	_lhs
 	/// @param	{Struct.TiteData}	_rhs
-	/// @param	{Array<Real>}			_axis
+	/// @param	{Array<Real>}		_axis
 	/// @return {Struct.TiteData}
 	static Dot = function(_lhs=undefined, _rhs=undefined, _axis=[1, 0]) 
 	{
@@ -544,7 +539,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 
 	/// @func	Lut(_src, _lut);
 	/// @desc	Uses Look up table to select new value. 
-	/// @param	{Struct.TiteData}	_src
+	/// @param	{Struct.TiteData}		_src
 	/// @param	{Struct.TiteGpuLookup}	_lut
 	static Lut = function(_src=undefined, _lut=undefined)
 	{
@@ -556,8 +551,8 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @func	Clamp(_src, _min, _max);
 	/// @desc	Clamps values to given range.
 	/// @param	{Struct.TiteData}	_src
-	/// @param	{Any}					_min
-	/// @param	{Any}					_max
+	/// @param	{Any}				_min
+	/// @param	{Any}				_max
 	/// @return {Struct.TiteData}
 	static Clamp = function(_src=undefined, _min=undefined, _max=undefined) 
 	{
@@ -570,7 +565,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @desc	Lerps two matrices with given rate.
 	/// @param	{Struct.TiteData}	_lhs
 	/// @param	{Struct.TiteData}	_rhs
-	/// @param	{Any}					_rate
+	/// @param	{Any}				_rate
 	/// @return {Struct.TiteData}
 	static Mix = function(_lhs=undefined, _rhs=undefined, _rate=undefined) 
 	{
@@ -583,7 +578,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @func	Offset(_src, _offset);
 	/// @desc	Adds offset to given data values.
 	/// @param	{Struct.TiteData}	_src
-	/// @param	{Any}					_offset
+	/// @param	{Any}				_offset
 	/// @return {Struct.TiteData}
 	static Offset = function(_src=undefined, _offset=undefined) 
 	{
@@ -595,7 +590,7 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @func	Scale(_src, _factor);
 	/// @desc	Scales values of given datablock.
 	/// @param	{Struct.TiteData}	_src
-	/// @param	{Any}					_factor
+	/// @param	{Any}				_factor
 	/// @return {Struct.TiteData}
 	static Scale = function(_src=undefined, _factor=undefined) 
 	{
@@ -607,8 +602,8 @@ function TiteData(_width=undefined, _height=undefined, _params=undefined) constr
 	/// @func	Normalize(_src, _min, _max);
 	/// @desc	Normalizes values of data to given range, but does not clamp if it exceeds.
 	/// @param	{Struct.TiteData}	_src
-	/// @param	{Any}					_min
-	/// @param	{Any}					_max
+	/// @param	{Any}				_min
+	/// @param	{Any}				_max
 	/// @return {Struct.TiteData}
 	static Normalize = function(_src=undefined, _min=undefined, _max=undefined)
 	{

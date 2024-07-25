@@ -8,17 +8,17 @@ uniform float uniIndexCurr;
 
 void main()
 {
-	vec2 _coord = gl_FragCoord.xy * uniTexel;
-	float _distPrev = texture2D(texDistPrev, _coord).r;
-	float _distCurr = texture2D(texDistCurr, _coord).r;
-	if (_distPrev <= _distCurr)
+	vec2 coord = gl_FragCoord.xy * uniTexel;
+	float distPrev = texture2D(texDistPrev, coord).r;
+	float distCurr = texture2D(texDistCurr, coord).r;
+	if (distPrev <= distCurr)
 	{
-		gl_FragData[0].r = texture2D(texIndexPrev, _coord).r;
-		gl_FragData[1].r = texture2D(texDistPrev, _coord).r;
+		gl_FragData[0].r = texture2D(texIndexPrev, coord).r;
+		gl_FragData[1].r = texture2D(texDistPrev, coord).r;
 	}
 	else
 	{
 		gl_FragData[0].r = uniIndexCurr;
-		gl_FragData[1].r = texture2D(texDistCurr, _coord).r;
+		gl_FragData[1].r = texture2D(texDistCurr, coord).r;
 	}
 }

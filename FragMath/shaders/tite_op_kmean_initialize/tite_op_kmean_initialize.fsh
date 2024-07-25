@@ -8,9 +8,9 @@ uniform float uniIndex;
 
 void main()
 {
-	vec4 _lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
-	vec4 _rhs = (floor(_lhs.z) == uniIndex)
-		? texture2D(texB, _lhs.xy)
+	vec4 lhs = texture2D(texA, gl_FragCoord.xy * uniTexelA);
+	vec4 rhs = (floor(lhs.z) == uniIndex)
+		? texture2D(texB, lhs.xy)
 		: vec4(0.0);
-	gl_FragData[0] = _rhs;
+	gl_FragData[0] = rhs;
 }

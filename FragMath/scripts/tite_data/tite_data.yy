@@ -1,12 +1,12 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"tite_data",
   "isCompatibility":false,
   "isDnD":false,
   "name":"tite_data",
   "parent":{
     "name":"Tite Data",
-    "path":"folders/TiteGpu/Data/Tite Data.yy",
+    "path":"folders/TiteGpu/Classes/Tite Data.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

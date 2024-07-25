@@ -26,8 +26,8 @@ function tite_reduce(_out, _src, _initialValue, _BlendSettings)
 	_BlendSettings();
 	
 	// Pre-reduce to nearest power of 2.
-	var _logW = sqr(floor(log2(_w)));
-	var _logH = sqr(floor(log2(_h)));
+	var _logW = power(2, floor(log2(_w)));
+	var _logH = power(2, floor(log2(_h)));
 	var _diffW = (_w - _logW);
 	var _diffH = (_h - _logH);
 	tite_target(_tempB);
@@ -92,7 +92,7 @@ function tite_reduce_mean(_out, _src)
 	{
 		gpu_set_blendmode_ext(bm_one, bm_one);
 	});
-	return tite_divide(_out, _out, _out.count);
+	return tite_divide(_out, _out, _out.size[0] * _out.size[1]);
 }
 
 
@@ -141,7 +141,10 @@ function tite_reduce(_out, _src, _op2x2, _opMxN, _default=undefined)
 	var _h = _src.size[1];
 	var _tempSrc = _src.Clone(true);
 	var _tempDst;
-	var _params = { format : _src.format };
+	var _params = { 
+		size: _src.size,
+		format : _src.format 
+	};
 	
 	// Do 2x2 sum-reduces.
 	tite_begin();
@@ -150,7 +153,7 @@ function tite_reduce(_out, _src, _op2x2, _opMxN, _default=undefined)
 	{
 		_w = ceil(_w / 2);
 		_h = ceil(_h / 2);
-		_tempDst = new TiteData(_w, _h, _params);
+		_tempDst = new TiteData({_params});
 		tite_sample("texA", _tempSrc);
 		tite_floatN("uniTexelA", _tempSrc.texel);
 		tite_target(_tempDst);
